@@ -1,0 +1,460 @@
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <title>房卡包</title>
+
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/angular.min.js"></script>
+    <script src="http://180.188.22.245:10001/ttxindaoyou/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/fastclick.js?v=2019"></script>
+    
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="/js/config.js"> <\/script>');
+        document.write('<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/load.js"> <\/script>');
+    </script>
+
+    <style>
+        .black {
+            -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+            filter: grayscale(100%);
+        }
+        .phone-number-box {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            background-color: rgba(0, 0, 0, .2);
+        }
+
+        .phone-number-box input {
+            border: none;
+            outline: none;
+            background: none;
+        }
+
+        .phone-number-box .phone-number {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            right: 0;
+            margin: auto;
+            width: 7.5rem;
+            height: 7rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .phone-number-box .phone-number-content {
+            margin: .0720rem;
+        }
+
+        .phone-number-box .phone-number .tips-text {
+            position: relative;
+            height: 0.5rem;
+        }
+
+        .phone-number-box .phone, .phone-number-box .phone-code {
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 86%;
+            height: 1rem;
+        }
+
+        .phone-number-box .phone {
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/num.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .phone-number-box .phone .enterNumBox {
+            display: flex;
+            padding: 0 5%;
+        }
+
+        .phone-number-box .phone .enterNumBox .enterNum {
+            flex: 1;
+            text-align: center;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: 0.7rem;
+            color: #fff;
+        }
+
+        .phone-number-box .num-box {
+            margin-top: 0.6rem;
+            padding: 0 0.4rem 0.2rem 0.4rem;
+        }
+
+        .phone-number-box .num-box .line {
+            display: flex;
+            margin-top: 0.35rem;
+        }
+
+        .phone-number-box .num-box .line .lineNum {
+            flex: 1;
+            width: 1;
+            height: 0.9rem;
+            margin-right: 0.2rem;
+        }
+
+        .phone-number-box .phone-code {
+            top: 1.0560rem;
+        }
+
+        .phone-number-box .phone-code input, .phone-number-box .phone input {
+            position: absolute;
+            width: 100%;
+            height: 1rem;
+            background: #ebc1a8;
+            padding: 0 .1440rem;
+            -webkit-border-radius: .2rem;
+            -moz-border-radius: .2rem;
+            border-radius: .2rem;
+            color: #fff;
+            font-size: 0.4rem;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #fff;
+            opacity: 1;
+        }
+
+        .phone-number-box .phone-code input {
+            padding-right: 1.2000rem;
+        }
+
+        .phone-number-box .phone-btn2, .phone-number-box .phone-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: .9120rem;
+            height: .3840rem;
+            line-height: .3840rem;
+            vertical-align: middle;
+            text-align: center;
+            color: #fff;
+            font-size: .132rem;
+        }
+
+        .phone-number-box .phone-btn {
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/newgame/phone-btn.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .phone-number-box .phone-btn2 {
+            color: #dcdcdc;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/newgame/phone-btn1.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .phone-number-box .phone-sure {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0 auto;
+            width: 40%;
+            height: 1rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/hall/btn_confirm.png) no-repeat;
+            background-size: 100% 100%;
+            border: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .phone-number-box .close-window {
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/close.png) no-repeat 0 0 / 100% 100%;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var obj = DynLoading.hall(BaseUrl + '/ay/rp');
+
+        $(function () {
+            wx.config({
+                debug: false,
+                appId: "wxebd9565a2df360f0",    
+                timestamp: "1639012744",    
+                nonceStr:"217bf0d6e43676bae6044e84010fffb5",    
+                signature: "ba6ae67783a6ca40bbe85c7a564ff3696d7b7733",    
+                jsApiList: [
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage',
+                    'hideMenuItems',
+                ]
+            });
+
+
+            wx.ready(function () {
+                wx.hideOptionMenu();
+            });
+
+        });
+
+
+
+        var globalData = {}
+        globalData.wid = "123";
+        globalData.tt = "OGE2YU5qSVBZZFVPW2NdSXZVaTVPNVVDZzFyd1ZUaVtjXTB6UG1RYk9pREJDeGQxY0tDNEFMUQ==";
+
+        var app = angular.module('app', [])
+
+        app.controller("myCtrl", function ($scope, $http) {
+            $scope.width = window.innerWidth;
+            $scope.height = window.innerHeight;
+
+            $scope.userInfo = {
+                "id": "373328",
+                "name": "lght",
+                "avatar": "https://thirdwx.qlogo.cn/mmopen/vi_32/3mEAfYwlic38936wnREx7bJul27BNEPvOCibL3HM7iazcqYYzkqUojiaG58EdBGlVyS1qe6mkDJ8qX5ibW9BVx0Z8JQ/132",
+                "card": obj.user.diamond,
+            }
+
+            var socketStatus = 0;
+            $(".main").show();
+            $("#loading").hide();
+
+            $scope.activity = new Array();
+            $scope.isShowAlert = false;
+            $scope.alertType = 0;
+            $scope.alertText = "";
+            $scope.cardNum = Number($scope.userInfo.card);
+            $scope.number = ''; //输入数量
+            $scope.inputNumber = null;  //输入框数字
+
+            if ($scope.cardNum === null
+                || $scope.cardNum === undefined
+                || isNaN($scope.cardNum)) {
+                $scope.cardNum = 0;
+            }
+
+            //输入框数字改变
+            $scope.changeNumber = function () {
+                if ($scope.inputNumber > $scope.cardNum) {
+                    $scope.inputNumber = $scope.cardNum;
+                }
+
+                $scope.number = $scope.inputNumber;
+
+                console.log($scope.inputNumber);
+
+                if ($scope.number === undefined || $scope.number === null) {
+                    $scope.number = 0;
+                } else {
+                    //$scope.inputNumber = $scope.number;
+                }
+            }
+            $scope.lock = false;
+
+            $scope.createRedPackage = function () {
+
+                if ($scope.number === undefined
+                    || $scope.number === null
+                    || isNaN($scope.number)
+                    || $scope.number <= 0) {
+                    alert('请输入正确的房卡数');
+                } else {
+                    $('#createPackage').addClass('black')
+                    if ($scope.lock == true) {
+                        return
+                    }
+                    $scope.lock = true;
+                    setTimeout(function () {
+                        $('#createPackage').removeClass('black')
+                    }, 3000)
+                    $http({
+                        url: BaseUrl + '/ay/cRP',
+                        method: 'POST',
+                        headers: {
+                            "Authorization": DynLoading.getWwid()
+                        },
+                        withCredentials: true,//必须要填
+                        data: {
+                            'account_id': $scope.userInfo.id,
+                            'ticket_count': $scope.number,
+                            'content': '恭喜发财',
+                        }
+                    }).success(function (data, header, config, status) {
+                        //var rpCode = data.result_message;
+                        if (data.result == 0) {
+                            $scope.lock = false;
+                            $scope.cardNum = $scope.cardNum - $scope.inputNumber;
+                            //alert(data.result_message + ' ' + data.data.code + '即将为你跳转到界面');
+                            window.location.href = "/packageDetail.html?red_code=" + data.data.code;
+                        } else {
+                            alert(data.result_message);
+                        }
+
+                    }).error(function (data, header, config, status) {
+                        alert(data.result_message);
+                    });
+                }
+
+            }
+            $scope.gotoHall = function () {
+                var url = "/index.html";
+                window.location.replace(url)
+            }
+            $scope.gotoMyRedPackage = function () {
+                var url = "/packageRecord.html";
+                window.location.replace(url)
+            }
+
+            $scope.isShowEnterRoomNum = false;
+            $scope.showEnterRoomNum = function () {
+                $scope.isShowEnterRoomNum = true;
+            }
+            $scope.hideEnterRoomNum = function () {
+                $scope.isShowEnterRoomNum = false;
+            }
+
+            $scope.enterRoomNum = function (num) {
+                $scope.number=$scope.number+num
+                if (parseInt($scope.number) > $scope.cardNum) {
+                    $scope.number = $scope.cardNum;
+                }
+
+                console.log('number', $scope.number)
+            }
+            $scope.resetRoomNum = function (num) {
+                $scope.number = '';
+            }
+            $scope.cacelNum = function () {
+                if ($scope.number.toString().length == 0) {
+                    return
+                }
+                var len = $scope.number.toString().length;
+                $scope.number= $scope.number.toString().substring(0, len - 1);
+            }
+
+        })
+
+    </script>
+</head>
+<link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/activity.css">
+
+<body ng-controller="myCtrl" style="background: #000;">
+<div style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000" id="loading">
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/loading.gif"
+         style="top: 40%;position: absolute;left: 50%;margin-left: -45px;margin-top: -45px;"/>
+</div>
+<div class="main" style="display: none;">
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/bg.jpg"
+         style="width: 100%;position: relative;height:100%" usemap="#planetmap"/>
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/back.png"
+         style="position: absolute;left: 3vw;top: 1vh;height: 8vh;" ng-click="gotoHall()">
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/text_make.png"
+         style="position: absolute;left: 50%;transform: translateX(-50%);top: 3vh;height: 4vh;">
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/package_record.png"
+         style="position: absolute;right: 3vw;top: 1vh;height: 8vh;" ng-click="gotoMyRedPackage()">
+
+    <div style="position: fixed; top: 22vh;width: 88vw; height: 3rem;left: 50%;transform: translateX(-50%); background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/input.png?v=1);background-size: 100% 100%;" ng-click="showEnterRoomNum()">
+
+    </div>
+
+    <div style="height: 44px; position: fixed; top: 24vh; left: 50%;transform: translateX(-50%);color: #d34f34; ">
+        <p style="font-size: 16pt; color: orange">我的房卡：{{cardNum}} 张</p>
+    </div>
+    <div style="height: 44px;position: fixed;top: 30vh;left: 50%;transform: translateX(-50%);right: 22px;border-radius: 4px;overflow: hidden;width: 60vw;box-shadow: 0 0px 1px 4px #e4e1d3;background: #b0aac4;">
+        <div id="pnumber" style="left: 0px; width: 200px; height: 44px;line-height: 44px; position: absolute; font-size: 13pt; color: gray; text-align: left;background: #b0aac4;" ng-click="showEnterRoomNum()">
+            {{number==''?'请输入房卡':number}}
+        </div>
+        <label style="position: absolute; height: 100%; line-height: 44px; right: 0px;width: 25px; color: black; font-size: 13pt; text-align: right;">张</label>
+    </div>
+    <div style="position: fixed; top: 42vh; left: 22px; right: 22px; height: 80px;">
+        <p style="text-align: center;">
+            <span style="color: #f9e151; font-size: 32pt">{{number==''?0:number}}</span>
+            <span style="color: #f9e151; font-size: 20pt">张</span>
+        </p>
+    </div>
+
+    <!--房间进入-->
+    <div class="phone-number-box room" ng-if="isShowEnterRoomNum">
+        <div class="phone-number">
+            <div class="phone-number-content">
+                <div class="tips-text">
+
+                </div>
+
+                <div class="num-box">
+                    <div class="line">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/1.png"
+                             ng-click="enterRoomNum(1)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/2.png"
+                             ng-click="enterRoomNum(2)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/3.png"
+                             ng-click="enterRoomNum(3)" style="margin-right: 0;">
+                    </div>
+                    <div class="line">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/4.png"
+                             ng-click="enterRoomNum(4)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/5.png"
+                             ng-click="enterRoomNum(5)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/6.png"
+                             ng-click="enterRoomNum(6)" style="margin-right: 0;">
+                    </div>
+                    <div class="line">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/7.png"
+                             ng-click="enterRoomNum(7)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/8.png"
+                             ng-click="enterRoomNum(8)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/9.png"
+                             ng-click="enterRoomNum(9)" style="margin-right: 0;">
+                    </div>
+                    <div class="line">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/reset.png"
+                             ng-click="resetRoomNum()">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/0.png"
+                             ng-click="enterRoomNum(0)">
+                        <img class="lineNum" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/joinroom/del.png"
+                             ng-click="cacelNum()" style="margin-right: 0;">
+                    </div>
+                </div>
+<!--                <button class="phone-sure" ng-click="hideEnterRoomNum()"></button>-->
+            </div>
+            <div class="close-window" ng-click="hideEnterRoomNum()"></div>
+        </div>
+    </div>
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/package_box.png"  style="position: absolute;width: 36vw;left: 50%;transform: translateX(-50%);bottom: 30vh; ">
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/btn_confirm.png"  style="position: absolute;width: 62vw;left: 50%;transform: translateX(-50%);bottom: 18vh; " ng-click="createRedPackage()">
+
+    <div style="position: absolute;color: #fff;bottom: 5vh;width: 86vw;left: 50%;transform: translateX(-50%);font-size: 18px;">
+        制作红包后，将页面分享给微信好友，即可领取。在红包记录中可查看所有红包。
+    </div>
+
+    <div style="left: 22px; right: 22px; top: {{height - 120}}px; position: fixed;">
+        <p style="text-align: center; color: #fff; font-size: 12pt"></p>
+    </div>
+
+
+</div>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/rem.js"></script>
+<script type="text/javascript">
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        // 通过下面这个API隐藏右上角按钮
+        WeixinJSBridge.call('hideOptionMenu');
+    });
+</script>
+<script>
+    $(document).on('click', 'img', function (e) {
+        e.preventDefault();
+    })
+</script>
+
+</body>
+</html>

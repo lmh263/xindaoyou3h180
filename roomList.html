@@ -1,0 +1,192 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <title>开房记录查询</title>
+
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/fastclick.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/rem.js"></script>
+    
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="/js/config.js"> <\/script>');
+        document.write('<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/load.js"> <\/script>');
+    </script>
+    
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/alert.css">
+
+    <style type="text/css">
+        .rowGame {
+            position: relative;
+            top: 0vw;
+            margin-top: 0vw;
+            left: 0;
+            width: 100vw;
+            height: 35vw;
+            overflow: hidden;
+        }
+
+        .rowGame .item {
+            position: absolute;
+            width: 25vw;
+            height: 33vw;
+            text-align: center;
+            color: #fff;
+            opacity: 0.3
+        }
+
+        .rowGame .item img {
+            position: absolute;
+            top: 1.5vw;
+            left: 1vw;
+            width: 20vw;
+            height: 25vw;
+        }
+
+        .rowGame .item .gamename {
+            position: absolute;
+            bottom: 1.5vw;
+            width: 100%;
+            text-align: center;
+            font-size: 11pt;
+        }
+
+        .gameScoreTitle {
+            position: relative;
+            top: 0vw;
+            margin-top: 0.5vw;
+            left: 0;
+            width: 100vw;
+            height: 7vw;
+            overflow: hidden;
+        }
+
+        .scoreRow {
+            position: relative;
+            top: 0vw;
+            margin-top: 1vw;
+        }
+        .selectBorder{
+            box-shadow: 0px 0px 4px 2px #e1ff3a;
+        }
+
+    </style>
+    <script type="text/javascript">
+        //
+        window.addEventListener('load', function () {
+            FastClick.attach(document.body);
+        }, false);
+
+        var obj = DynLoading.hall(BaseUrl + '/home1/index');
+
+
+        var newNum = "";
+        var per = window.innerWidth / 530;
+        var globalData = {
+            "baseUrl": BaseUrl+'/',
+            "fileUrl": "http://180.188.22.245:10001/ttxindaoyou/",
+            "cfileUrl": "https://xindaoyou7.oss-cn-hangzhou.aliyuncs.com/",
+            "gameList": [
+                {"game_type": "1", "game_name": "拼十", "game_icon": "1.png"},
+                {"game_type": "4", "game_name": "炸金花", "game_icon": "4.png"},
+                {"game_type": "5", "game_name": "三公", "game_icon": "5.png"},
+                {"game_type": "10", "game_name": "小天九", "game_icon": "10.png"},
+                {"game_type": "17", "game_name": "超级三加一", "game_icon": "17.png"},
+                {"game_type": "18", "game_name": "大天九", "game_icon": "18.png"},
+                {"game_type": "43", "game_name": "至尊牛", "game_icon": "43.png"},
+                {"game_type": "12", "game_name": "开船牛牛", "game_icon": "12.png"},
+                {"game_type": "13", "game_name": "开船三公", "game_icon": "13.png"}
+            ],
+            "hallPath": '/index.html'
+        };
+        globalData.wid = "123";
+        globalData.tt = "ZDIzODQ4SWdwQVlsWVg1bkhlQUp3cFthXUFHWnpBUmtRT0xhb1hkTWNmQkpMQ3Bhc3RqWnM=";
+        var userData = {
+            "accountId": "18247",
+            "nickname": "大朗",
+            "avatar": "https://thirdwx.qlogo.cn/mmopen/vi_32/CtRhXnCkH0NkKQPzQ5OldXWLw1nW1rp5kklFVyRdHwiaNwlcG8ibP7ICayQWibY3QvEtibALv48IO2UicJ9pVUK5vbw/132",
+        };
+        var configData = {
+            "appId": "wxdafedcb7e2755c5d",
+            "timestamp": "1605463651",
+            "nonceStr": "b27c805db1221dadec2bc9db2dcb2410",
+            "signature": "8f077b08945423749d66d3abadc0ac48ccb4b74a",
+        };
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            // 通过下面这个API隐藏右上角按钮
+            WeixinJSBridge.call('hideOptionMenu');
+        });
+    </script>
+</head>
+
+<body style="position: fixed; width: 100%;margin: 0 auto;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/bg.jpg);background-size: 100vw 100vh;">
+
+<div id="loading" style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000">
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/loading.gif"
+         style="top: 40%;position: absolute;left: 50%;margin-left: -45px;margin-top: -45px;"/>
+</div>
+<div class="main" id="app-main" style="position: relative; width: 100%;margin: 0 auto; display: none;">
+    <div class="box" >
+
+        <img style="position: fixed;width: 14vw;top: 2vh;left: 10px;z-index: 1;" class="bottomHome"
+             src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/back2.png" v-on:click="gotoHall()"/>
+
+        <div style="color: #fefeba;font-size: 0.8rem;text-align: center;line-height: 10vh;height: 10vh;">开房记录</div>
+
+        <div style="overflow-x: scroll;">
+            <div style="width: 164vw;">
+                <img @click="clickGame(item)" style="width: 16vw; margin: 2vw 1vw;" :class="selectedGame==item.game_type?'selectBorder':''" :src="'http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/log/'+item.game_icon" v-for="item in globalData.gameList">
+            </div>
+        </div>
+        <div class="scoreRow" style="overflow-y: scroll;height: 78vh;">
+            <div class="backcolor"></div>
+            <div style="position: relative;">
+                <div v-for="(item, index) in gameScoreList" style="position: relative;width: 100%;height: 12vh;line-height: 13vw;text-align: center;margin-top: 2px;color: white;overflow:hidden;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/item-bg.png);background-size: 100% 100%;" v-on:click="clickScoreItem(item)">
+                    <div style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;    width: 18vw;height: 18vw;position: relative;top: 50%;transform: translateY(-50%);left: 2vw;">
+                        <img :src="'http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/log/'+item.game_type+'.png'" style="position: absolute;left: 1vw;top: 1vw;border-radius: 1vw;width: 16.5vw;height: 16.5vw;">
+                    </div>
+                    <div style="position: absolute;left: 23vw;font-size: 14pt;color: rgb(0, 0, 0);text-align: left;top: 1vw;">
+                        房间号: {{item.number}}
+                    </div>
+                    <div style="    position: absolute;width: 100%;left: 23vw;font-size: 12pt;color: rgb(0, 0, 0);text-align: left;bottom: 1vw;">
+                        {{item.time}}
+                    </div>
+                    <div style="color:rgb(76,205,59);position: absolute;top: 50%;transform: translateY(-50%);right: 10vw;font-size: 0.5rem;">
+                        已结束
+                    </div>
+                    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/arrow.png" style="position: absolute;right: 2vw;top: 50%;transform: translateY(-50%);width: 6vw;">
+                </div>
+                <div id="moretext" v-if="selectedGame"
+                     style="position: relative;margin-top: 4px;color: #39d7ff;height: 13vw;text-align: center;line-height: 13vw;font-size: 2.2vh;"
+                     v-on:click="clickMore(selectedGame)">
+                    <div class="backcolor"></div>
+                    点击加载更多
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/bscroll.min.js"></script>
+<script src="http://180.188.22.245:10001/ttxindaoyou/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/vue.min.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/vue-resource.min.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/roomList_daoyou1.js?v=1"></script>
+<script type="text/javascript">
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        // 通过下面这个API隐藏右上角按钮
+        WeixinJSBridge.call('hideOptionMenu');
+    });
+</script>
+<script>
+    $(document).on('click', 'img', function (e) {
+        e.preventDefault();
+    })
+</script>
+
+</html>

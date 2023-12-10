@@ -1,0 +1,2563 @@
+<html>
+<head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>9人拼三</title>
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/flower9_daoyou_v1.css?v=12s111">
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/alertbox.css">
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/giftShop_dy/gift.css?v=s1">
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/skin.css?v=s1">
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/ncomm.css">
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/fastclick.js"></script>
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="/js/config.js?v='+ new Date().getTime() +'"> <\/script>');
+    </script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/load.js"></script>
+    <script>
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 360*100 + 'px';
+        window.addEventListener('load', function() {
+            FastClick.attach(document.body);
+        }, false);
+
+        var room_number = DynLoading.getUrlParam("i");
+        var obj = DynLoading.hall(BaseUrl + '/home/room' + "?i=" + room_number + "_");
+        room_number=obj.data.room_id
+
+        if(obj.result != 0){
+            alert(obj.result_message);
+            var return_url = window.location.href;
+            console.log(return_url);
+            window.location.href = '/index.html?return_url=' + return_url + '&t=' + obj.data.t;
+        }
+        console.log(obj);
+
+        var newNum = "";
+        var per = window.innerWidth / 530;
+        var globalData = {
+            "lucifer": obj.data.lucifer,
+            "card": obj.data.card,
+            "roomNumber": room_number,
+            "socket": obj.data.socket,
+            "hallPath":"/index.html",
+            "roomUrl": window.location.href,
+            "baseUrl": BaseUrl + "/",
+            "fileUrl": "http://180.188.22.245:10001/ttxindaoyou/",
+            "cfileUrl": "http://180.188.22.245:10001/ttxindaoyou/",
+            "isWechat": obj.data.is_weixin,
+            "isXianliao": obj.data.is_xianliao,
+            "xlTitle":"(房间号:" + room_number + ")",
+            "roomStatus":obj.data.room_status,
+            "scoreboard":obj.data.balance_scoreboard,
+            "session": obj.data.session,
+            "shareTitle": obj.data.platfrom_name + "：(房间:" + room_number + ")",
+            "gameType": obj.data.game_type,
+            "maxCount": obj.data.max_count,
+            "tk": obj.data.tk,
+            "hallName": obj.data.platfrom_name,
+            "gameName": "拼三",
+            "qrUrl" : BaseUrl + "/qr/index?url=" + encodeURIComponent(window.location.href) + "&number=" + room_number
+        };
+        var userData = {
+            "accountId":obj.data.user.account_id,
+            "nickname":obj.data.user.nickname,
+            "avatar":obj.data.user.headimgurl,
+            "card":obj.data.card,
+            "individuality":obj.data.user.individuality,
+        };
+        var configData = {
+            "appId":obj.data.config_ary.appId,
+            "timestamp":obj.data.config_ary.timestamp,
+            "nonceStr":obj.data.config_ary.nonceStr,
+            "signature":obj.data.config_ary.signature,
+        };
+
+        // 修改浏览器title
+        var new_userName = "";
+        var old_userNname = obj.data.user.nickname;
+        if (old_userNname.length > 8) {
+            new_userName = old_userNname.substring(0, 7);
+            new_userName += "..."
+        }
+        else {
+            new_userName = old_userNname;
+        }
+        document.getElementsByTagName("title")[0].innerText = new_userName + "|" + globalData.hallName;
+    </script>
+    <style>
+        body{font-size: 0.12rem;}
+        /*.f-cb:after{*/
+        /*display:block;*/
+        /*visibility:hidden;*/
+        /*clear:both;*/
+        /*height:0;*/
+        /*overflow:hidden;*/
+        /*content:'.';*/
+        /*}*/
+        .copy-tip {
+            background: rgba(0, 0, 0, .6);
+            color: #fff;
+            position: fixed;
+            bottom: .6rem;
+            font-size: .15rem;
+            border-radius: 5px;
+            padding: 10px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 89;
+        }
+
+        #room_str {
+            position: fixed;
+            top: -300px;
+        }
+
+        .zhuonuo {
+            position: fixed;
+            width: 0.32rem;
+            height: 0.32rem;
+            top: .1104rem;
+            right: 0.45rem;
+            z-index: 110;
+        }
+        .zhuonuo2 {
+            position: fixed;
+            width: 4.5vh;
+            height: 4.5vh;
+            bottom: 0.75vh;
+            right: 21vh;
+            z-index: 110;
+        }
+        /*自动准备*/
+        .auto-ready6,.auto-ready9 {
+            position: absolute;
+            bottom: .05rem;
+            width: .34rem;
+            height: .34rem;
+            z-index: 100;
+            right: 0.6rem;
+        }
+        .auto-ready6 img, .auto-ready9 img{
+            width: 100%;
+        }
+        .auto-ready12,.auto-ready13,.auto-ready15,.auto-ready17{
+            position: absolute;
+            bottom: 0.75vh;
+            width: 4.5vh;
+            height: 4.5vh;
+            z-index: 100;
+            right: 27vh;
+        }
+        .auto-ready12 img,.auto-ready13 img,.auto-ready15 img,.auto-ready17 img{
+            width: 100%;
+        }
+
+        #dialog {
+            position: fixed;
+            width: 300px;
+            height: 150px;
+            padding: 10px;
+            box-sizing: border-box;
+            background: #fff;
+            font-size: 16px;
+            left: 50%;
+            top: 50%;
+            margin-left: -150px;
+            margin-top: -75px;
+            border-radius: 10px;
+            z-index: 99;
+        }
+
+        #dialog .main {
+            word-wrap: break-word;
+            word-break: normal;
+        }
+
+        #dialog .other {
+            text-align: center;
+            margin-top: 38px
+        }
+
+        #dialog img {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 35px;
+        }
+
+        .user-list {
+            box-sizing:border-box;
+            width: 100%;
+        }
+
+        .join-user-info {
+            width: 15%;
+            margin: 0 .0480rem;
+            text-align: center;
+            margin-right: 10px;
+            display:inline;
+        }
+        .join-user-info span {
+            display: block;
+            width: 100%;
+            height: .1200rem;
+            overflow: hidden;
+            line-height: .1200rem;
+            font-size: .1056rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .join-user-info img {
+            width: 100%;
+            border-radius:3px;
+        }
+        .points {
+            position: fixed;
+            left: 50%;
+            -webkit-transform: translate(-50%);
+            -moz-transform: translate(-50%);
+            -ms-transform: translate(-50%);
+            -o-transform: translate(-50%);
+            transform: translate(-50%);
+            bottom: .0576rem;
+            width: .8640rem;
+            height: .2400rem;
+            line-height: .2400rem;
+            text-align: center;
+            background-color: rgba(0,0,0,.5);
+            border-radius: .1200rem;
+            color: #FFF;
+            font-size: .1440rem;
+            z-index: 100;
+        }
+        .top {
+            position: fixed;
+            width: 100%;
+            height: .4896rem;
+            background-size: 100% 100%;
+            z-index: 100;
+        }
+        .flex-cont {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+        }
+        .top {
+            position: absolute;
+            width: 100%;
+            height: .4896rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/common/niuniu-top-bg1.png) no-repeat;
+            background-size: 100% 100%;
+            z-index: 100;
+        }
+        .top .left {
+            padding: .1008rem 0 0 .05rem;
+            /*flex: 1;*/
+        }
+        .top .left img {
+            width: 0.21824rem;
+            vertical-align: middle;
+        }
+        .top .left span {
+            display: inline-block;
+            padding: 0 .0736rem 0 0;
+            min-width: .4528rem;
+            height: .1920rem;
+            line-height: .1920rem;
+            text-align: right;
+            color: #FFF;
+            font-size: .1392rem;
+            vertical-align: middle;
+            margin-left: -0.03rem;
+            background-color: #160f0d;
+            border-radius: 0 .1128rem .1128rem 0;
+        }
+        .top .flex-item {
+            text-align: center;
+            color: #fefefe;
+            font-size: .1440rem;
+            line-height: 1.5;
+            /* flex: 1; */
+            /*padding-right: .1444rem;*/
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+        }
+        .top .right {
+            position: absolute;
+            width: 1.3rem;
+            /* flex: 1; */
+            right: 0;
+        }
+        .top .rules-focus {
+            display: inline-block;
+            min-width: .7728rem;
+        }
+        .top .rules-focus span.kefu {
+            /*background: url(*//*files/images/common/icon_copy.png) no-repeat;*/
+            background-size: 100% 100%;
+            right: 1.0rem;
+        }
+        .top .rules-focus span.watch {
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/icon_watch2.png) no-repeat;
+            background-size: 100% 100%;
+            left: 0.94rem;
+        }
+        .top .rules-focus span.watch .guestNum{
+            position: absolute;
+            right: 0rem;
+            bottom: -0.05rem;
+            display: block;
+            background: red;
+            width: 0.15rem;
+            height: 0.15rem;
+            line-height: 0.15rem;
+            font-size: 12px;
+            border-radius: 50%;
+            text-align: center;
+            font-family: Verdana;
+        }
+        .top .rules-focus span.rules {
+            background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/common/game-rules.png) no-repeat;
+            background-size: 100% 100%;
+            left: 0.54rem;
+        }
+        .top .rules-focus span {
+            position: absolute;
+            width: 0.32rem;
+            height: 0.32rem;
+            top: .1104rem;
+        }
+        .top .rules-focus span.return-index {
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/return-index3.png) no-repeat;
+            background-size: 100% 100%;
+            left: 0.1rem;
+        }
+        .chat {
+            right: .1440rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/game-chat02.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        .music{
+            right: .6048rem;
+        }
+        .music, .chat {
+            position: absolute;
+            bottom: .05rem;
+            width: .34rem;
+            height: .34rem;
+            text-align: center;
+            line-height: .3744rem;
+            z-index: 100;
+        }
+        .music img:last-of-type {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: .3744rem;
+            height: .3744rem;
+        }
+        .icon-more-mask{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 109;
+            display: none;
+        }
+        .icon-more {
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/icon_more.png) no-repeat;
+            background-size: 100% 100%;
+            padding: 0.05rem 0 0.05rem 0.15rem;
+            position: fixed;
+            right: -0.35rem;
+            bottom: 0.6rem;
+            z-index: 110;
+            -webkit-transition: right .3s;
+            -moz-transition: right .3s;
+            -ms-transition: right .3s;
+            -o-transition: right .3s;
+            transition: right .3s;
+        }
+        .icon-more .game-indiv{
+            display: block;
+            width: 0.3rem;
+            height: 0.35rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/game-indiv.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        .icon-more .game-rule{
+            display: block;
+            width: 0.3rem;
+            height: 0.35rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/game-rule.png) no-repeat;
+            background-size: 100% 100%;
+            margin-top: 0.05rem;
+        }
+        .icon-more .game-sound{
+            display: block;
+            width: 0.3rem;
+            height: 0.35rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/game-sound.png) no-repeat;
+            background-size: 100% 100%;
+            margin-top: 0.05rem;
+        }
+        .rules-mask2, .focus-mask, .share-mask {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, .8);
+        }
+
+        .rules-mask2 .close, .focus-mask .close, .share-mask .close {
+            position: absolute;
+            right: 0.125rem;
+            top: 0.09rem;
+            width: .35rem;
+            height: .35rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common_hailuo/cancel.png) no-repeat;
+            background-size: 100% 100%;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+        }
+
+        .rules-mask2 .content .rule-title {
+            height: 0.4rem;
+        }
+
+        .rules-mask2 .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            padding: .0720rem .0720rem 0.2rem .0720rem;
+            width: 3.2rem;
+            /*height: 5rem;*/
+            text-align: center;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common_hailuo/rule-tab.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .rules-mask2 .content .niuniu-rules {
+            height: 3.2rem;
+            overflow-x: hidden;
+            width: 96%;
+            margin: 0 auto;
+        }
+
+        .rules-mask2 .content .rules-bottom-tab {
+            width: 90%;
+            margin: 0 auto;
+            margin-top: 0.05rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/flower_hailuo/rule-bottom-tab.png) no-repeat;
+            background-size: 100% 100%;
+            height: 1.4rem;
+            text-align: left;
+            padding: 0.1rem;
+            color: #661616;
+            font-family: 'SimHei';
+        }
+
+        .rules-mask2 .content .text {
+            display: inline-block;
+            height: .1536rem;
+            line-height: 1;
+            color: #ffffff;
+            font-size: .1152rem;
+        }
+
+        .rules-mask2 .content .flex-cont {
+            align-items: center;
+            padding: .0520rem 0 .0520rem .168rem;
+            font-size: .1152rem;
+            line-height: 1.5;
+            text-align: left;
+            /*background: url("../images/newgame/niuniu-rules-line.png") no-repeat left bottom;*/
+            background-size: 100% auto;
+        }
+
+        .rules-mask2 .content .niuniu-rules::-webkit-scrollbar {
+            display: none;
+        }
+
+        .rules-mask2 .content .niuniu-rules .rules-text {
+            text-align: justify;
+            padding: 0 .0960rem 0 .310rem;
+            line-height: 2;
+            text-indent: -.2rem;
+        }
+
+        .rules-mask2 .content .flex-cont.rules-title {
+            -webkit-justify-content: center;
+            justify-content: center;
+            font-size: .1920rem;
+            color: #333;
+            padding: .0480rem 0;
+        }
+
+        .rules-mask2 .content .flex-cont .name {
+            color: #666;
+            letter-spacing: .0240rem;
+        }
+
+        .rules-mask2 .content .flex-cont .flex-item {
+            color: #333;
+        }
+
+        .rules-mask2 .content .rules-item span {
+            display: inline-block;
+            width: 50%;
+            float: left;
+        }
+        .place{
+            width: 1.2rem;
+            height: 1.5rem;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .place .betRound {
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: 0 12px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 14px;
+            width: 60%;
+        }
+        .place .scoresArea{position: relative;margin-top:0.2rem;width: 100%;height:100%;}
+        .place .totalScore{
+            position: relative;
+            top: 10px;
+            width: 0.8rem;
+            height: 0.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .place .totalScore img{
+            position: absolute;
+            width: 20px;
+            left: 0.03rem;
+            top: 0.025rem;
+        }
+        .place .totalScore .scores{
+            background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/flower_hailuo/score-bg.png);
+            background-size: 100% 100%;
+            height: 0.2rem;
+            line-height: 0.2rem;
+            text-align: center;
+            padding: 0px 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            width: 0.6rem;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .sidelines-mask {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, .5);
+        }
+
+        .sidelines-content {
+            box-sizing: border-box;
+            position: fixed;
+            right:  -3.5rem;
+            top: 0rem;
+            z-index: 999;
+            width: 50%;
+            min-height: 3.5rem;
+            background-color: rgba(17, 23, 35, .9);
+            padding: .4320rem .1200rem 0;
+            -webkit-border-radius: 0 0 .0480rem .0480rem;
+            -moz-border-radius: 0 0 .0480rem .0480rem;
+            border-radius: 0 0 .0480rem .0480rem;
+            font-family: '黑体';
+            -webkit-transition: right .3s;
+            -moz-transition: right .3s;
+            -ms-transition: right .3s;
+            -o-transition: right .3s;
+            transition: right .3s;
+        }
+
+        .sidelines-num {
+            height: .2112rem;
+            line-height: .2112rem;
+            font-size: .1152rem;
+            text-align: center;
+            color: #fff;
+            background-color: rgba(45, 67, 103, .8);
+            -webkit-border-radius: .0480rem;
+            -moz-border-radius: .0480rem;
+            border-radius: .0480rem;
+            margin-bottom: .2880rem;
+        }
+
+        .sidelines-num i {
+            color: #dbe5a1;
+        }
+
+        .sidelines-list {
+            padding: .2400rem 0 .1200rem;
+            background: rgba(45, 67, 103, .8) url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/sidelines-list-bg.png) no-repeat center .0480rem / 100% auto;
+            -webkit-border-radius: .0480rem;
+            -moz-border-radius: .0480rem;
+            border-radius: .0480rem;
+            margin-bottom: .2400rem;
+        }
+
+        .sidelines-box {
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 1.2000rem;
+        }
+
+        .sidelines-item {
+            position: relative;
+            height: .3072rem;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            margin-bottom: .0480rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/sidelines-item.jpg) no-repeat center center / 100% 100%;
+        }
+
+        .sidelines-path {
+            overflow: hidden;
+            width: .2880rem;
+            height: .2880rem;
+            margin: 0 .0480rem;
+        }
+
+        .sidelines-path img {
+            width: 100%;
+            height: 100%;
+            -webkit-border-radius: .0480rem;
+            -moz-border-radius: .0480rem;
+            border-radius: .0480rem;
+        }
+
+        .sidelines-info {
+            overflow: hidden;
+            height: 100%;
+            line-height: 1;
+            -webkit-flex: 1;
+            flex: 1;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin-right: .1920rem;
+            color: #fff;
+            font-size: .1152rem;
+        }
+
+        .sidelines-name {
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .sidelines-icon {
+            position: absolute;
+            right: .0120rem;
+            top: 50%;
+            -webkit-transform: translate(0, -50%);
+            -moz-transform: translate(0, -50%);
+            -ms-transform: translate(0, -50%);
+            -o-transform: translate(0, -50%);
+            transform: translate(0, -50%);
+            width: .1248rem;
+            height: .0768rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/sidelines-icon.png) no-repeat 0 0 / 100% 100%;
+        }
+
+        .sidelines-join-game {
+            margin: 0 auto;
+            width: .7200rem;
+            height: .2400rem;
+            line-height: .2400rem;
+            color: #eefaff;
+            text-align: center;
+            background-color: #46bdf4;
+            -webkit-border-radius: .0480rem;
+            -moz-border-radius: .0480rem;
+            border-radius: .0480rem;
+        }
+        .sidelines-look-game{
+            margin: 0 auto;
+            width: .900rem;
+            height: .300rem;
+            color: #eefaff;
+        }
+        .sidelines-look-game img{
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidelines-join-game {
+            background-color: #88d23a;
+        }
+
+        .sidelines-close {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: .1104rem;
+            height: .1440rem;
+            background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/sidelines-closr.png) no-repeat center center / 100% 100%;
+        }
+    </style>
+</head>
+
+<body>
+<style>
+    body.modal-show {position: fixed;width: 100%;}
+    .record{position: fixed;top:0;left:0;height:100%;width:100%; z-index: 150;}
+    .record .recordBack{position: fixed;top:0;left:0;height:100%;width:100%;background: #0d0a12;opacity:.7;}
+    .record .leftLine{position: fixed;left: 0%;margin-left:20px;height:100%;width: 0;border-left:1px solid #ecb700;}
+    .record .mainPart{position: absolute;top:0;left:0;height:100%;width:100%;overflow: auto;}
+    .record .mainPart .recordList{position: relative;margin-left: 40px;margin-top: 20px;}
+    .record .mainPart .recordList .recordTime{color:#ecb700;font-size: 14px;}
+    .record .mainPart .recordList .yellowPoint{position: absolute;width:30px;height:30px;top:10px;left:-35px; }
+    .record .mainPart .recordList .yellowPoint .point{background:#ecb700;position: absolute;height:6px;width:6px;border-radius:3px;top:12px;left:12px; }
+
+    .record .mainPart .recordList .recordInfo{background:#cfced0;position: relative;width:80%;border-radius:6px;margin-top:5px;padding:5px 15px; }
+    .record .mainPart .recordList .recordInfo .recordItem{height:40px;font-family:simHei; border-top:1px solid #ababab;line-height: 40px;font-size: 16px;}
+    .record .mainPart .recordList .recordInfo .recordItem .name{float: left;height: 40px;width:120px;overflow: hidden;margin-left: 15px;}
+    .record .mainPart .recordList .recordInfo .recordItem .score{float: right;width:80px;overflow: hidden;right: 15px;}
+    .record .mainPart .recordList .recordInfo .borderNone{border: none;}
+    .rules-mask, .focus-mask, .share-mask {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        background-color: rgba(0, 0, 0, .8);
+    }
+    .rules-mask .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        padding: .0720rem;
+        width: 2.9856rem;
+        background-color: rgba(255, 255, 255, .2);
+        -webkit-border-radius: .0480rem;
+        -moz-border-radius: .0480rem;
+        border-radius: .0480rem;
+        -webkit-box-shadow: 0 0 0.072rem #153b72 inset;
+        -moz-box-shadow: 0 0 .0720rem #153b72 inset;
+        box-shadow: 0 0 0.072rem #153b72 inset;
+        text-align: center;
+    }
+    .rules-mask .content .niuniu-rules {
+        background-color: #fff2d8;
+        -webkit-box-shadow: 0 0 0.072rem #153b72 inset;
+        -moz-box-shadow: 0 0 .0720rem #153b72 inset;
+        box-shadow: 0 0 0.072rem #153b72 inset;
+        -webkit-border-radius: .0480rem;
+        -moz-border-radius: .0480rem;
+        border-radius: .0480rem;
+        margin-bottom: .0720rem;
+        height: 3.3000rem;
+        overflow-x: hidden;
+    }
+    .rules-mask .content .flex-cont {
+        align-items: center;
+        padding: .0520rem 0 .0520rem .3168rem;
+        font-size: .1152rem;
+        line-height: 1.5;
+        text-align: left;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/newgame/niuniu-rules-line.png) no-repeat left bottom;
+        background-size: 100% auto;
+    }
+    .flex-cont {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+    }
+    .rules-mask .content .flex-cont .name {
+        color: #666;
+        letter-spacing: .0240rem;
+    }
+    .rules-mask .content .flex-cont .flex-item {
+        color: #333;
+    }
+    .rules-mask .content .flex-cont.rules-title {
+        -webkit-justify-content: center;
+        justify-content: center;
+        font-size: .1920rem;
+        color: #333;
+        padding: .0480rem 0;
+    }
+    .rules-mask .content .flex-cont {
+        align-items: center;
+        padding: .0520rem 0 .0520rem .3168rem;
+        font-size: .1152rem;
+        line-height: 1.5;
+        text-align: left;
+        border-bottom:solid 1px #ebc1a8;
+    }
+    .rules-mask .content .niuniu-rules .rules-text {
+        text-align: justify;
+        padding: 0 .0960rem 0 .310rem;
+        line-height: 2;
+        font-size: 14px;
+        text-indent: -.2rem;
+        color:#555;
+    }
+
+    .rules-mask .close, .focus-mask .close, .share-mask .close {
+        position: absolute;
+        left: 50%;
+        bottom: .3480rem;
+        -webkit-transform: translate(-50%);
+        -moz-transform: translate(-50%);
+        -ms-transform: translate(-50%);
+        -o-transform: translate(-50%);
+        transform: translate(-50%);
+        width: .2688rem;
+        height: .2688rem;
+        background: url("/ttxindaoyou/files/images/common/game-close3.png") no-repeat;
+        background-size: 100% 100%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+    }
+    .chat-list-mask {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+    }
+    .chat-list1 {
+        position: fixed;
+        right: .0750rem;
+        bottom: .7rem;
+        z-index: 199;
+        width: 2.3040rem;
+        transition: display 2s;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common_hailuo/message-tab.png) no-repeat center bottom;
+        background-size: 100% 100%;
+    }
+
+    .chat-list-ul1 {
+        box-sizing: border-box;
+        width: 2.1696rem;
+        height: 1.65rem;
+        overflow-x: hidden;
+        margin: .0672rem;
+        padding: .0672rem .0672rem .0240rem .0672rem;
+        -webkit-border-radius: .096rem;
+        -moz-border-radius: .096rem;
+        border-radius: .096rem;
+    }
+
+    .chat-list-ul1 li {
+        height: .2688rem;
+        line-height: .2688rem;
+        margin: 0 0 .0480rem 0;
+        padding: 0 .1056rem;
+        font-size: .1200rem;
+        color: #88382d;
+        -webkit-border-radius: .0480rem;
+        -moz-border-radius: .0480rem;
+        border-radius: .0480rem;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/chat-border.png) no-repeat center bottom;
+        background-size: auto .024rem;
+    }
+    .window-masks {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        background-color: rgba(0, 0, 0, 1);
+    }
+    .window-masks .border-opacity {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        -webkit-border-radius: .0480rem;
+        -moz-border-radius: .0480rem;
+        border-radius: .0480rem;
+        padding: .0720rem;
+    }
+    .window-masks.return-index .container {
+        border: .0096rem solid #afb0b2;
+    }
+
+    .window-masks.return-index .container {
+        border: .0096rem solid #afb0b2;
+    }
+
+    .window-masks.return-index .main {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-items: center;
+        align-items: center;
+        width: 1.8rem;
+        min-height: 0.8rem;
+        background-color: #302b91;
+        border: .0048rem solid #fff;
+        -webkit-border-radius: .0480rem;
+        -moz-border-radius: .0480rem;
+        border-radius: .0480rem;
+        margin: 0.35rem 0.35rem 0.2rem 0.35rem;
+        padding: .0960rem;
+        color: #fff;
+        font-size: .23rem;
+        text-align: justify;
+    }
+
+    .window-masks.return-index .container .button {
+        position: relative;
+        text-align: center;
+        margin-bottom: .0960rem;
+    }
+
+    .window-masks.return-index .container .sure, .window-masks.return-index .container .cancel {
+        display: inline-block;
+        width: 0.9rem;
+        height: .3312rem;
+        line-height: 0.3312rem;
+        font-size: .1800rem;
+        text-align: center;
+        margin: 0 .0480rem;
+        color: #fff;
+    }
+
+    .window-masks.return-index .container .sure {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/btn1.png) no-repeat;
+        background-size: 100% 100%;
+    }
+
+    .window-masks.return-index .container .cancel {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/btn2.png) no-repeat;
+        background-size: 100% 100%;
+    }
+
+
+    .window-masks.return-index .border-opacity-v2 .main {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-items: center;
+        align-items: center;
+        width: 2.7280rem;
+        min-height: 1.2096rem;
+        background-color: rgba(68, 68, 174, .5);
+        border: .0048rem solid #19256d;
+        -webkit-border-radius: .076rem;
+        -moz-border-radius: .076rem;
+        border-radius: .076rem;
+        margin: .1200rem;
+        padding: .0960rem;
+        color: #e8b24c;
+        font-size: .2304rem;
+        text-align: justify;
+    }
+
+    .window-masks.return-index .border-opacity-v2 .container {
+        border: none;
+    }
+
+    .window-masks.return-index .border-opacity-v2 .container .button {
+        position: relative;
+        text-align: center;
+        margin-bottom: .0960rem;
+        margin-top: .16rem;
+        overflow-y: hidden;
+    }
+
+    .window-masks.return-index .border-opacity-v2 .container .sure, .window-masks.return-index .border-opacity-v2 .container .cancel {
+        display: inline-block;
+        width: 1.0272rem;
+        height: .3696rem;
+        font-size: .15441rem;
+        line-height: .38rem;
+        text-align: center;
+        margin: 0 .086rem;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .window-masks.return-index .border-opacity-v2 .container .sure {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/decIndex-button1.png) no-repeat;
+        background-size: 100% 100%;
+        -webkit-text-stroke-width: 0.0048rem;
+        -webkit-text-stroke-color: #14309f;
+    }
+
+    .window-masks.return-index .border-opacity-v2 .container .cancel {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/decIndex-button2.png) no-repeat;
+        background-size: 100% 100%;
+        -webkit-text-stroke-width: 0.0048rem;
+        -webkit-text-stroke-color: #9e5f0f;
+    }
+    .window-masks {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        background-color: rgba(0, 0, 0, 1);
+    }
+    .window-masks .border-opacity {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        -webkit-border-radius: .0480rem;
+        -moz-border-radius: .0480rem;
+        padding: .0720rem;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/back_home_box.png);
+        background-size: 100% 100%;
+    }
+
+    .window-masks .border-opacity .container {
+        position: relative;
+    }
+
+    .alert .mainPart .backImg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.5vh;
+        top: 0;
+        left: 0;
+        background-size: 100% 300%;
+        border: 0.1vh solid #3e3e3e;
+        background: #fff!important;
+    }
+    .alert .mainPart .backImg .blackImg {
+        position: absolute;
+        width: 40.6vh;
+        height: 25vh;
+        border-radius: 1.5vh;
+        top: 2.2vh;
+        left: 2.2vh;
+        background: #2f2f2f;
+    }
+    .alert .mainPart .alertText {
+        position: absolute;
+        width: 100%;
+        line-height: 3.5vh;
+        font-size: 2.5vh;
+        width: 36vh;
+        left: 50%;
+        margin-left: -18vh;
+        top: 5.6vh;
+        text-align: center;
+    }
+    .mainPart .backImg .blackImg {
+        background: #fff!important;
+        border: none!important;
+    }
+    .alert .mainPart .alertText{
+        color: #333;
+        font-size: 2.2vh;
+    }
+    .rules-mask .close, .focus-mask .close, .share-mask .close{
+        bottom:15%;
+    }
+
+    /* 声音对话框 */
+    .audioRoom-pj{position: fixed;width: 100%;height:100%;top:0;left:0;z-index: 109;}
+    .audioRoom-pj .audioRoomBack{width: 100%;height:100%;background: #000;opacity:0.6;}
+    .audioRoom-pj .mainPart{width: 3rem;height:2rem;top:50%;left:50%;transform:translate(-50%,-50%);position: absolute;}
+    .audioRoom-pj .mainPart .createB{
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/music-box.png) no-repeat;
+        background-size: 100% 100%;
+        width: 100%;
+        height: 100%;
+        top: 0%;
+        left: 0%;
+        position: absolute;
+        border-radius: 10px;
+    }
+
+    .audioRoom-pj .mainPart .createTitle {
+        position: relative;
+        height: 5vh;
+        text-align: center;
+    }
+
+    .audioRoom-pj .mainPart .createTitle img {
+        position: relative;
+        height: 2.6vh;
+        margin-top: 1.2vh;
+    }
+
+    .audioRoom-pj .mainPart .cancelCreate {
+        width: 0.5rem;
+        height: 0.5rem;
+        top: -0.15rem;
+        right: -0.15rem;
+        position: absolute;
+    }
+
+    .audioRoom-pj .mainPart .createCommit {
+        position: absolute;
+        line-height: 5.5vh;
+        height: 5.5vh;
+        font-size: 2.5vh;
+        width: 17vh;
+        left: 50%;
+        margin-left: -8.5vh;
+        bottom: -7vh;
+        text-align: center;
+        background: url("../images/common/button2.png");
+        background-size: 100%;
+        color: #fff;
+    }
+
+    .audioRoom-pj .mainPart .blueBack {
+        width: 42vh;
+        height: 14vh;
+        margin: 0 auto;
+        position: relative;
+        top: 0.5rem;
+    }
+
+    .audioRoom-pj .mainPart .blueBack .selectPart {
+        width: 100%;
+        margin-top: 4px;
+        font-size: 2.2vh;
+        position: relative;
+        color: #b57c2e;
+        border-radius: 0px;
+        font-family: simHei;
+        height: 4vh;
+        line-height: 4vh;
+        padding: 0.8vh 0;
+        display: flex;
+    }
+
+    .audioRoom-pj .mainPart .blueBack .selectPart .selectTitle {
+        float: left;
+        width: 13vh;
+        text-align: right;
+        flex: 2;
+    }
+
+    .audioRoom-pj .mainPart .blueBack .selectPart .selectBox {
+        float: left;
+        height: 2.2vh;
+        width: 1rem;
+        margin-top: 0.7vh;
+        flex: 3;
+    }
+    .audioRoom-pj .mainPart .blueBack .selectPart .selectBox img {
+        float: left;
+        height: 2.2vh;
+        width: 100%;
+        margin-top: 0.7vh;
+    }
+
+    .audioRoom-pj .mainPart .blueBack .selectPart .selectText {
+        float: left;
+        margin-left: 0.8vh;
+        flex: 1;
+    }
+    .audioRoom-pj .mainPart .blueBack .selectPart .selectText img{
+        width: 0.25rem;
+        height: 0.25rem;
+    }
+    .indiv-mask{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,.7);
+        z-index: 90;
+    }
+    .indiv-box{
+        width: 2.7rem;
+        height: 3.2rem;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/set-indiv-bg.png) no-repeat;
+        background-size: 100% 100%;
+        z-index: 82;
+    }
+    .indiv-box-info{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .tip-text {
+        width: 82vw;
+        height: 19vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/indiv/text3.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .indiv-mask .person-info {
+        position: relative;
+        height: 8vh;
+        margin-left: 4vw;
+        font-size: 0.15rem;
+        color: #f59b7e;
+    }
+    .indiv-title{
+        height: 0.75rem;
+    }
+    .indiv-content{
+        height: 1.5rem;
+        width: 90%;
+        margin: 0 auto;
+    }
+    .indiv-content .person-info .avatar {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+    }
+
+    .indiv-content .person-info .name {
+        position: absolute;
+        left: 60px;
+        top: 5px;
+        width: 42vw;
+        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+    }
+
+    .indiv-content .person-info .id {
+        position: absolute;
+        left: 60px;
+        top: 30px;
+    }
+    .indiv-content .my-indiv {
+        margin-top: 5vh;
+        font-size: 0.15rem;
+        margin-left: 4vw;
+    }
+
+    .indiv-content .my-indiv .label {
+        color: #8a6737;
+    }
+
+    .indiv-content .my-indiv .my-indiv-text {
+        color: #f59b7e;
+    }
+    .confirm-indiv2 {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/hall/confirm.png) no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        bottom: 2vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1.1rem;
+        height: 0.4rem;
+    }
+    .hide-indiv{
+        position: absolute;
+        width: 0.42rem;
+        height: 0.42rem;
+        right: 0.05rem;
+        top: 0.03rem;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/hall/close.png) no-repeat;
+        background-size: 100% 100%;
+        z-index: 200;
+    }
+    .tip{
+        position: absolute;
+        width: 2rem;
+        height: 0.2rem;
+        line-height: 0.2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 2.4rem;
+    }
+    .enter-indiv{
+        position: absolute;
+        width: 2rem;
+        height: 0.4rem;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 2rem;
+    }
+    .enter-indiv input {
+        width: 100%;
+        height: 100%;
+        text-indent: 10px;
+        font-size: 0.15rem;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/input-bg.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .confirm-indiv {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/hall/confirm.png) no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        bottom:0.1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1.1rem;
+        height: 0.4rem;
+    }
+
+    .toChat{
+        position: absolute;
+        bottom: 1vh;
+        left: 3vw;
+        width: .34rem;
+        height: .34rem;
+        text-align: center;
+        line-height: .3744rem;
+        z-index: 100;
+    }
+    
+    .qrcode{
+        position: fixed;
+        bottom: .05rem;
+        right: 2.5rem;
+        width: .34rem;
+        height: .34rem;
+        text-align: center;
+        line-height: .3744rem;
+        z-index: 100;
+    }
+    .qrcode-box-info{
+        padding-top: 40;
+        padding-left: 5;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .qrcode-title{
+        height: 0.75rem;
+    }
+    .qrcode-box{
+        width: 2.7rem;
+        height: 3.2rem;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/set-indiv-bg.png) no-repeat;
+        background-size: 100% 100%;
+        z-index: 120;
+    }
+    .hide-qrcode{
+        position: absolute;
+        width: 0.42rem;
+        height: 0.42rem;
+        right: 0.05rem;
+        top: 0.03rem;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/hall/close.png) no-repeat;
+        background-size: 100% 100%;
+        z-index: 200;
+    }
+    
+    .flex-cont {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+    }
+
+    .flex-cont .flex-item {
+        -webkit-flex: 1;
+        flex: 1;
+    }
+    .rules-daoyou-mask .content .flex-cont {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/rules-line.png) no-repeat left bottom;
+        background-size: 100% auto;
+        align-items: center;
+        padding: .0520rem 0 .0520rem 0.05rem;
+        font-size: .14rem;
+        line-height: 1.5;
+        text-align: left;
+        color: #e5652b;
+        width: 80%;
+        margin: 0 auto;
+    }
+    .rules-daoyou-mask .close, .focus-mask .close, .share-mask .close {
+        position: absolute;
+        left: 50%;
+        -webkit-transform: translate(-50%);
+        -moz-transform: translate(-50%);
+        -ms-transform: translate(-50%);
+        -o-transform: translate(-50%);
+        transform: translate(-50%);
+        width: .2688rem;
+        height: .2688rem;
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/niuniu-close.png) no-repeat;
+        background-size: 100% 100%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+    }
+    .rules-daoyou-mask, .focus-mask, .share-mask {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        background-color: rgba(0, 0, 0, .6);
+    }
+    .rules-daoyou-mask .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        padding: .0720rem;
+        width: 3.3rem;
+        text-align: center;
+    }
+    .rules-daoyou-mask .content .rule-title {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/rule-title.png);
+        background-size: 100% 100%;
+        height: 0.4rem;
+        line-height: 0.4rem;
+        font-size: 0.2rem;
+        color: #f8e30a;
+    }
+    .rules-daoyou-mask .content .niuniu-rules {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/rules-item.png);
+        background-size: 100% auto;
+        height: 3.3000rem;
+        margin-top: -1px;
+        overflow: scroll;
+    }
+    .rules-daoyou-mask .content .niuniu-rules .name {
+        /*width: 1.4rem;*/
+    }
+    .rules-daoyou-mask .content .rules-bottom {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/rules-bottom.png);
+        background-size: 100% 100%;
+        height: 0.2rem;
+    }
+    .rules-daoyou-mask .content .flex-cont.color-value span {
+        width: .288rem;
+        height: .288rem;
+    }
+
+    .rules-daoyou-mask .content .color-value span:nth-child(1) {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/card0.png) no-repeat center center;
+        background-size: auto 85%;
+    }
+
+    .rules-daoyou-mask .content .color-value span:nth-child(2) {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/card1.png) no-repeat center center;
+        background-size: auto 85%;
+    }
+
+    .rules-daoyou-mask .content .color-value span:nth-child(3) {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/card2.png) no-repeat center center;
+        background-size: auto 85%;
+    }
+
+    .rules-daoyou-mask .content .color-value span:nth-child(4) {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/fiesc/images/newgame/card3.png) no-repeat center center;
+        background-size: auto 85%;
+    }
+    .game-round{
+        position: absolute;
+        color: #fff;
+        z-index: 99;
+        width: 0.8rem;
+        left: 50%;
+        top: 1.5rem;
+        text-align: center;
+        transform: translateX(-50%);
+        font-size: 16px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 0.5rem;
+    }
+    .game-points{
+        position: absolute;
+        z-index: 9;
+        color: #fff;
+        left: 50%;
+        text-align: center;
+        transform: translateX(-50%);
+        top: 0.4rem;
+        width: 0.8rem;
+        height: 0.25rem;
+        line-height: 0.25rem;
+        border-radius: 0.12rem;
+        background: rgba(0,0,0,0.4);
+    }
+    .bottomTab {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6vh;
+        z-index: 89;
+    }
+    .bottomRoomCard{
+        position: fixed;
+        bottom: 0.75vh;
+        left: 2vh;
+        z-index: 90;
+        height: 4.5vh;
+    }
+    .bottomRoomCard img{
+        height: 4.5vh;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 90;
+    }
+    .bottomRoomCard .num{
+        display: inline-block;
+        padding: 0 .05rem 0 0;
+        min-width: .4528rem;
+        height: .1920rem;
+        line-height: .1920rem;
+        text-align: right;
+        color: #FFF;
+        font-size: .1392rem;
+        margin-top: 0.03rem;
+        vertical-align: middle;
+        background-color: #160f0d;
+        border-radius: 0 .1128rem .1128rem 0;
+    }
+    .bottomWatch {
+        background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/common/icon_watch2.png) no-repeat;
+        background-size: 100% 100%;
+        position: fixed;
+        bottom: 0.75vh;
+        right: 15vh;
+        width: 4.5vh;
+        height: 4.5vh;
+        z-index: 90;
+    }
+    .bottomWatch .guestNum {
+        position: absolute;
+        right: -0.05rem;
+        top: -0.05rem;
+        display: block;
+        color: #fff;
+        background: red;
+        width: 0.15rem;
+        height: 0.15rem;
+        line-height: 0.15rem;
+        font-size: 12px;
+        border-radius: 50%;
+        text-align: center;
+        font-family: Verdana;
+    }
+    .room-gameover {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999999;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+    }
+    .room-gameover-ten {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999999;
+        width: 100%;
+        height: auto;
+        background-color: #000;
+    }
+</style>
+
+<div id="dialog" style="display:none">
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/cancel.png" onclick="fuzhiMain.closeDialog()">
+    <p id="main" class="main">
+    </p>
+    <p class="other">
+        请手动复制
+    </p>
+</div>
+
+<span class="copy-tip" id="tips" style="display:none">已复制到剪贴板</span>
+
+<div style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000;z-index:115;" id="loading">
+    <div class="load4">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+
+<!-- position: relative; width: 100%;margin: 0 auto; background: #fff; display: none; -->
+<div class="main" id="app-main" style="display: none;'">
+    <span class="copy-tip" v-if="isShowTipsText" style="z-index: 200;">{{tipsText}}</span>
+    <span class="copy-tip" id="tips" style="display:none">复制成功</span>
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/icon_copy2.png" v-if="globalData.maxCount<=10" class="needsclick zhuonuo" @click="copyLink" id="copy_btn" />
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/icon_copy2.png" v-if="globalData.maxCount>10" class="needsclick zhuonuo2" @click="copyLink" id="copy_btn" />
+    <textarea id="room_str" readonly="readonly"></textarea>
+
+    <audio id="media" v-show="false" autostart="false" src="http://180.188.22.245:10001/ttxindaoyou/files/audio/paijiu/xy_button.mp3"></audio>
+
+    <div class="window-masks return-index" id="returnIndex" v-show="isShowHomeAlert">
+        <div class="border-opacity">
+            <div class="container"><i class="mask-icon mask-top"></i><i class="mask-icon mask-right"></i><i
+                        class="mask-icon mask-bottom"></i><i class="mask-icon mask-left"></i>
+                <div class="main">确认返回主页？</div>
+                <div class="button">
+                    <div class="sure" id="returnIndexBtn" v-on:click="hall">返回首页</div>
+                    <div class="cancel" id="cancelBtn" v-on:click="closeHomeAlert">取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-masks return-index" id="returnIndex" v-show="isShowAlert && !add_user">
+        <div class="border-opacity">
+            <div class="container f-cb"><i class="mask-icon mask-top"></i><i class="mask-icon mask-right"></i><i
+                        class="mask-icon mask-bottom"></i><i class="mask-icon mask-left"></i>
+                <div class="main">{{alertText}}</div>
+                <div class="button">
+                    <div class="sure" id="returnIndexBtn" v-on:click="hall">返回首页</div>
+                    <div class="sure" id="returnIndexBtn" v-show="joinType==1||joinType==3" v-on:click="guestRoom">观战</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 观战功能 -->
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/guest/is_watching.png" style="position: fixed;z-index: 90;width: 50%;left: 25%;top: 50%;" v-show="isWatching==1">
+    <div class="sidelines-mask" style="display:none" v-on:click="hideGuests"></div>
+    <div class="sidelines-content">
+        <div class="sidelines-num">观战人数：<i>{{guests.length}}</i></div>
+        <div class="sidelines-list">
+            <div class="sidelines-box">
+                <div class="sidelines-item" v-for="guest in guests">
+                    <div class="sidelines-path"><img v-bind:src="guest.avatar">
+                    </div>
+                    <div class="sidelines-info">
+                        <div class="sidelines-name">{{guest.nickname}}</div>
+                    </div>
+                    <div class="sidelines-icon"></div>
+                </div>
+            </div>
+        </div>
+        <div class="sidelines-btn">
+            <div class="sidelines-join-game" v-show="showSitdownButton" v-on:click="sitDown">加入游戏</div>
+            <div class="sidelines-look-game" v-show="showWatchButton" v-on:click="guestRoom"><img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/guset-room.png"></div>
+        </div>
+        <div class="sidelines-close" v-on:click="hideGuests"></div>
+    </div>
+
+    <!--防作弊未设置-->
+    <div v-show="isShowIndiv" class="indiv-mask">
+        <div class="indiv-box">
+            <div class="indiv-box-info">
+                <div class="hide-indiv" @click="hideIndiv()"></div>
+                <div class="indiv-title"></div>
+                <div class="enter-indiv">
+                    <input type="text" placeholder="请输入个性暗号" v-model="inputIndiv" v-on:blur="blurIpt">
+                </div>
+                <div class="confirm-indiv" @click="showIndivConfirm()"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div v-show="isShowQr" class="indiv-mask">
+        <div class="qrcode-box">
+            <div class="hide-qrcode" @click="hideQr()"></div>
+            <div id="qrcodeId" class="qrcode-box-info">
+                <img id="copyImg" v-bind:src="globalData.qrUrl" width="97%"/>
+            </div>
+        </div>
+    </div>
+
+    <!--防作弊确认框-->
+    <div v-if="isShowIndivConfirm" class="indiv-mask">
+        <div class="indiv-box" style="width: 80vw;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/indiv/box.png);background-size: 100% 100%;">
+            <div class="indiv-box-info">
+                <div class="hide-indiv" @click="hideIndivConfirm()"></div>
+                <div class="indiv-title"></div>
+                <div class="tip-text"></div>
+                <div class="btn-indiv" @click="hideIndivConfirm()"></div>
+                <div class="confirm-indiv2" @click="setIndividuality()"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--已设置过防作弊-->
+    <div v-if="isShowIndividuality" class="indiv-mask">
+        <div class="indiv-box" style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/indiv/box.png);background-size: 100% 100%;">
+            <div class="indiv-box-info">
+                <div class="hide-indiv" @click="hideIndiv()"></div>
+                <div class="indiv-title"></div>
+                <div class="indiv-content">
+                    <div class="person-info">
+                        <img :src="userData.avatar" class="avatar">
+                        <div class="name">{{userData.nickname}}</div>
+                        <div class="id">编号: {{userData.accountId}}</div>
+                    </div>
+                    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/line.jpg" style="width: 90%;margin-left: 5%;margin-top: 0.1rem;">
+                    <div class="my-indiv">
+                        <span class="label">防作弊暗号</span>
+                        <span class="my-indiv-text">{{userData.individuality}}</span>
+                    </div>
+                    <div style="font-size: 0.15rem;margin-left: 4vw;color: #8a6737">请认准反作弊暗号和编号</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--弹出暗号框-->
+    <div class="showOnceIndiv" v-show="showOnceIndiv" style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/game/indiv_bg.png);background-size: 100% 100%;">
+        <div style="position:relative;">
+            <div style="position: absolute;color: rgb(245, 155, 126);top: 0.3rem;left: 1.1rem;">注意！ 注意！</div>
+            <div style="position:absolute;color: #000;top: 0.5rem;height: 0.25rem;line-height: 0.25rem;left: 0.9rem;width: 1.1rem;text-align: center;font-size: 12px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">暗号:{{userData.individuality}}</div>
+        </div>
+    </div>
+
+    <div class="top flex-cont" v-if="globalData.maxCount<12">
+        <div class="left">
+            <img  src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/roomCard.png">
+            <span >{{userData.card}}</span>
+        </div>
+        <div class="flex-item"><span>{{game.round}}</span>/<span>{{game.total_num}}</span>局</div>
+        <div class="right">
+            <div class="rules-focus">
+                <span v-on:click="showHomeAlert" class="return-index"></span>
+                <span class="watch" v-on:click="showGuests">
+                    <i class="guestNum">{{guests.length}}</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--<div class="round">{{game.round}}&nbsp/&nbsp{{game.total_num}}&nbsp局</div>-->
+
+    <div class="disconnect" v-show="!connectOrNot" style="position: fixed;top:45%;left: 0;width: 100%;text-align: center;z-index: 101">
+        <div style="width: 250px;height:27px;position: absolute;top:-2;left: 50%;margin-left: -125px;background: #000;opacity: .5;border-radius:15px;">
+        </div>
+        <a style="font-size: 16px;color: #fff;padding: 5px 14px;position:relative;">已断开连接，正在重新连接...</a>
+    </div>
+
+    <div class="icon-more-mask" @click="hideIconMore"></div>
+    <div class="icon-more" @click="showIconMore">
+        <span class="game-indiv" v-on:click="showIndiv"></span>
+        <span class="game-rule" v-on:click="showGameRule"></span>
+        <span class="game-sound" v-on:click="showAudioSetting">
+        </span>
+    </div>
+
+    <div class="bottom-box" v-if="globalData.maxCount>9">
+        <div class="game-round" ><span>{{game.round}}</span>/<span>{{game.total_num}}</span>局</div>
+        <div class="game-points">底分：<span>{{ruleInfo.default_score}}</span>分</div>
+        <img class="bottomTab" src="http://180.188.22.245:10001/ttxindaoyou/fiesc/images/nbull/bottom.png" alt="">
+        <div class="bottomRoomCard" >
+            <img  src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/roomCard.png" />
+            <div class="num">
+                <div style="position: relative;padding: 0 1.5vh 0 5vh;">{{userData.card}}</div>
+            </div>
+        </div>
+        <span class="bottomWatch" v-on:click="showGuests">
+            <i class="guestNum">{{guests.length}}</i>
+        </span>
+
+        <img class="bottomHome" src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/return-index3.png" v-on:click="showHomeAlert" />
+        <img class="bottomMessage" src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/game-chat02.png" v-on:click="showMessage">
+    </div>
+
+    <div class="points" v-if="globalData.maxCount<12">底分：<span>{{ruleInfo.default_score}}</span>分</div>
+    <div class="chat" v-on:click="showMessage" v-if="globalData.maxCount<12"></div>
+
+    <!-- 聊天室 -->
+    <img class="toChat" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/hall/btn_chat.png" v-on:click="goToChat">
+    <!--二维码-->
+    <img class="qrcode" src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/erweima.png" v-on:click="showQr">
+    
+    <!--自动准备-->
+    <div :class="'auto-ready'+globalData.maxCount" v-on:click="autoReady()" v-if="isWatching!=1">
+        <img v-show="appData.isAutoReady==1" src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/ready_false4.png">
+        <img v-show="appData.isAutoReady==0" src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/ready_true3.png">
+    </div>
+<!--    <div  v-if="player[0].card_type>0" class="myCardType" style="bottom: 20%;">-->
+<!--        <div v-if="player[0].card_type==1">高牌</div>-->
+<!--        <div v-if="player[0].card_type==2">对子</div>-->
+<!--        <div v-if="player[0].card_type==3">顺子</div>-->
+<!--        <div v-if="player[0].card_type==4">同花</div>-->
+<!--        <div v-if="player[0].card_type==5">同花顺</div>-->
+<!--        <div v-if="player[0].card_type==6">三条</div>-->
+<!--        <div v-if="player[0].card_type==9">魔王</div>-->
+<!--    </div>-->
+    <div  v-if="player[0].card_type>0&&(player[0].is_seen==1||player[0].account_status!=6)" class="myCardType" style="bottom: 10%;">
+        <img :src="'http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/flower/winType'+player[0].card_type+'.png'">
+    </div>
+
+
+
+    <div  class="table" id="table" v-on:click="confirmAudioSetting('1')">
+        <img class="tableBack"  src="http://180.188.22.245:10001/ttxindaoyou/files/images/table/table.jpg" />
+        <img class="tableBack" id="tablemark"  src="" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);width: 1.4rem;height: 0.4rem;" />
+        <div class="roomNum" style="position: absolute;top: 40%;left: 50%;text-align: center;transform: translateX(-50%);color: #66a6d2;font-size: 0.15rem;">
+            房号:{{globalData.roomNumber}}
+        </div>
+        <div style="position: absolute;color: #fff;font-size: 0.15rem;" :style="globalData.maxCount==9||globalData.maxCount>=13?'top: 4%;left: 50%;transform: translateX(-50%);':'top: 8%;left: 2%;'">
+            编号:{{userData.accountId}}
+        </div>
+
+<!--        <div id="gameBottom">-->
+<!--            <img class="bottomTab" src="--><!--files/images/common_hailuo/bottom.png" alt="">-->
+<!--            <img class="bottomRule" src="--><!--files/images/common_hailuo/game-rules.png"-->
+<!--                 v-on:click="showGameRule">-->
+<!--            <img class="bottomSound" src="--><!--files/images/common_hailuo/game-sound.png"-->
+<!--                 v-on:click="showAudioSetting" style="z-index: 90">-->
+<!--            <img class="bottomMessage" src="--><!--files/images/common_hailuo/game-chat.png"-->
+<!--                 v-on:click="showMessage">-->
+<!--            <img v-show="player[0].account_status<2" class="bottomWatch" src="--><!--files/images/common_hailuo/game-watch.png"-->
+<!--                 v-on:click="showGuests"/>-->
+<!--        </div>-->
+
+        <!-- 筹码  -->
+        <div class="place" v-show="game.status==2">
+            <div class="betRound" v-if="bet_round>0">第{{curr_circle}}/{{bet_round}}轮</div>
+            <div class="totalScore" >
+                <div class="scores">{{game.score}}</div>
+                <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower_hailuo/totalScore.png" />
+            </div>
+            <div class="scoresArea"></div>
+        </div>
+
+        <!-- 发牌  -->
+        <div class="cardDeal">
+            <div v-for="p in player" v-show="(p.account_id>0&&p.account_status>2&&(p.num!=1||(p.account_status!=4&&p.account_status!=6&&p.account_status!=7&&!player[0].is_showCard))&&(game.cardDeal>0||p.account_status==6||p.account_status==7))&&appData.ruleInfo.play_mode!=2" v-if="game.cardDeal!=-1">
+
+                <div class="card" v-bind:class="'cardPoker' + p.poker_kw + ' card' + p.num + '1'" v-show="game.cardDeal>0||p.account_status==6||p.account_status==7"></div>
+                <div class="card" v-bind:class="'cardPoker' + p.poker_kw + ' card' + p.num + '2'" v-show="game.cardDeal>1||p.account_status==6||p.account_status==7"></div>
+                <div class="card" v-bind:class="'cardPoker' + p.poker_kw + ' card' + p.num + '3'" v-show="game.cardDeal>2||p.account_status==6||p.account_status==7"></div>
+                <div class="card" v-bind:class="'cardPoker' + p.poker_kw + ' card' + p.num + '4'" v-show="(game.cardDeal>2||p.account_status==6||p.account_status==7)&&appData.is_super==true"></div>
+                <div class="isSeen" v-bind:class="'isSeen' + p.num" v-show="p.num>1&&p.account_status==4"></div>
+                <div class="isQuit" v-bind:class="'isQuit' + p.num" v-show="p.account_status==6"></div>
+                <div class="isLose" v-bind:class="'isLose' + p.num" v-show="p.account_status==7&&!p.is_pk"></div>
+                <div class="isSwop" v-bind:class="'isSwop' + p.num" v-show="p.account_huan_status==1"></div>
+            </div>
+
+            <div v-for="p in player" v-show="(p.account_id>0&&p.account_status>2&&(p.num!=1||(p.account_status!=4&&p.account_status!=6&&p.account_status!=7&&!player[0].is_showCard))&&(game.cardDeal>0||p.account_status==6||p.account_status==7))&&appData.ruleInfo.play_mode==2">
+
+                <div class="card mcard0" v-bind:class="'card' + p.num + '1'" v-show="game.cardDeal>0||p.account_status==6||p.account_status==7" style="z-index: 94;">
+                    <div class="mface mback" v-bind:class="'card' + player[p.num-1].card[2]"></div>
+                </div>
+                <div class="card mcard1" v-bind:class="'card' + p.num + '2'" v-show="game.cardDeal>1||p.account_status==6||p.account_status==7" style="z-index: 93;">
+                    <div class="mface mback" v-bind:class="'card' + player[p.num-1].card[1]"></div>
+                </div>
+                <div class="card mcard2" v-bind:class="'card' + p.num + '3'" v-show="game.cardDeal>2||p.account_status==6||p.account_status==7">
+                    <div class="mface mback" v-bind:class="'card' + player[p.num-1].card[0]"></div>
+                </div>
+                <div class="card" v-bind:class="'card' + p.num + '4'" v-show="(game.cardDeal>2||p.account_status==6||p.account_status==7)&&appData.is_super==true"></div>
+                <div class="isSeen" v-bind:class="'isSeen' + p.num" v-show="p.num>1&&p.account_status==4"></div>
+                <div class="isQuit" v-bind:class="'isQuit' + p.num" v-show="p.account_status==6"></div>
+                <div class="isLose" v-bind:class="'isLose' + p.num" v-show="p.account_status==7&&!p.is_pk"></div>
+                <div class="isSwop" v-bind:class="'isSwop' + p.num" v-show="p.account_huan_status==1"></div>
+            </div>
+
+            <!-- 自己的牌 -->
+            <div class="myCards" v-show="player[0].is_showCard&&player[0].account_status>2" >
+                <div v-show="player[0].is_win" class="winText" >
+                    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/text_win.png" v-show="!player[0].win_show && player[0].account_id==userData.accountId&&player[0].is_guest!=1" />
+                    <div class="winScore" v-show="player[0].win_show" style="width: 100%;left: 0;text-align: center;font-size: 16px;">
+                        +{{player[0].current_win}}
+                    </div>
+                    <div v-show="player[0].win_show" style=" width: 300%; left: 50%; margin-left: -150%;text-align: center; font-size: 20px; position: absolute;  color: #f1c953;">{{player[0].win_type==5?"喜牌+":player[0].win_type==6&&player[0].WinJoy!=0?"豹子+":""}}{{player[0].WinJoy}}</div>
+                </div>
+                <div v-show="player[0].LoseJoy && player[0].lose_show" class="winText" >
+                    <div v-show="player[0].LoseJoy && player[0].lose_show" style=" width: 300%; left: 50%; margin-left: -150%;text-align: center; font-size: 20px; position: absolute;  color: #f1c953;">{{player[0].win_type==5?"喜牌":player[0].win_type==6&&player[0].LoseJoy!=0?"豹子":""}}{{player[0].LoseJoy}}</div>
+                </div>
+
+                <div class="cards card0" v-on:click="chooseCard(0,player[0].card[0])">
+                    <div class="face front" v-bind:class="'cardPoker' + player[0].poker_kw"></div>
+                    <div class="face back" v-bind:class="'card' + player[0].card[0]"></div>
+                    <div class="myQuitBack" v-show="player[0].account_status==6||player[0].account_status==7"></div>
+                    <div class="cardLayer"></div>
+                </div>
+
+                <div class="cards card1" v-on:click="chooseCard(1,player[0].card[1])">
+                    <div class="face front" v-bind:class="'cardPoker' + player[0].poker_kw"></div>
+                    <div class="face back" v-bind:class="'card' + player[0].card[1]"></div>
+                    <div class="myQuitBack" v-show="player[0].account_status==6||player[0].account_status==7"></div>
+                    <div class="cardLayer"></div>
+                </div>
+
+                <div class="cards card2" v-on:click="chooseCard(2,player[0].card[2])">
+                    <div class="face front" v-bind:class="'cardPoker' + player[0].poker_kw"></div>
+                    <div class="face back" v-bind:class="'card' + player[0].card[2]"></div>
+                    <div class="myQuitBack" v-show="player[0].account_status==6||player[0].account_status==7"></div>
+                    <div class="cardLayer"></div>
+                </div>
+
+                <div class="cards card3" v-show="appData.is_super==true">
+                    <div class="face front" v-bind:class="'cardPoker' + player[0].poker_kw"></div>
+                    <div class="face back" v-bind:class="'card' + player[0].other"></div>
+                    <div class="myQuitBack" v-show="player[0].account_status==6||player[0].account_status==7"></div>
+                    <div class="cardLayer"></div>
+                </div>
+
+                <!-- width: 70px;height:20px;position: absolute;top:17px;left:50%;margin-left: -40px;z-index: 95;text-align: center;color: #fff;font-size: 15px;padding: 1px 5px;-->
+                <div class="clickToLook" style="width: 1rem;height: 0.8rem;position: absolute;top: 0;margin-top: -0.22rem;left: 50%;transform: translateX(-50%);z-index: 110;text-align: center;color: rgb(255, 255, 255);font-size: 15px;padding: 1px 5px;" v-if="player[0].account_id==userData.accountId&&player[0].is_guest!=1" v-show="player[0].account_status==5&&player[0].playing_status==2 && game.can_look==1" v-on:click="choose(1)">
+                     <div style="position: absolute;top:0;left: 0;"></div>
+                    <div style="position: relative;opacity: 0.6;width: 0.6rem;height: 20px;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/flower_hailuo/clickToLook.png);background-size: 100% 100%;left: 50%;transform: translateX(-50%);">点击看牌</div>
+<!--                    <img src="--><!--files/images/flower/text_click2look.png" style="width: 70px;height: 20px">-->
+                </div>
+
+                <div class="isSeen isSeen1" v-if="player[0].account_id!=userData.accountId&&isWatching==1" v-show="player[0].account_status==4"></div>
+                <div class="isQuit isQuit1" v-show="player[0].account_status==6"></div>
+                <div class="isLose isLose1" v-show="player[0].account_status==7"></div>
+            </div>
+
+        </div>
+        <div  v-for="p in player" key="p.num" class="member" v-bind:class="'member' + p.num" v-show="p.account_id<=0">
+            <div class="quitBack" style="" v-on:click="sitDown(p.serial_num)">
+                <img :src="'http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/seat/seat' + p.serial_num + '.png'">
+            </div>
+        </div>
+        <div class="player1">
+            <div class="isReady" v-show="game.round!=game.total_num">
+                <img src="http://180.188.22.245:10001/ttxindaoyou/fiesc/images/common/ready_button.png" class="unready" v-if="player[0].num==1&&player[0].account_id==userData.accountId&&player[0].is_guest!=1" v-show="(player[0].account_status==1||player[0].account_status==0)&&game.status==1" v-on:click="imReady" />
+                <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/ready_text.png" class="ready" v-show="player[0].account_status==2" />
+            </div>
+        </div>
+
+        <!-- 玩家 -->
+        <div  v-for="p in player" key="p.num"  class="member" v-bind:class="'member' + p.num+ ' pos'+ p.account_id" v-show="p.account_id>0&&!p.is_pk"  >
+            <!--<img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/player_bg.png" class="background">-->
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/player_selected.png" class="background" v-show="p.is_win&&p.num==1">
+<!--            <div class="title">{{p.nickname}}</div>-->
+
+
+
+            <div class="avatar" v-on:click="sendGitViewShow(p.account_id,p)">
+                <img v-bind:src="p.headimgurl" style="width: 100%;border-radius: 3px;">
+                <img v-if="p.head_kw!=''" :src="'http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/head/' + p.head_kw + '.png'" class="headKw">
+                <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/avatar_timer.jpg" style="position: absolute;left:0%;top: 0;width: 100%;border-radius: 3px;" v-show="p.playing_status>1">
+                <div style="position: absolute; top: 0px;left: 0%;width: 100%; height: 7vh;line-height: 7vh;text-align: center;color: #602603;font-size: 20px;" v-if="p.num!=1" v-show="p.playing_status>1">{{p.limit_time}}</div>
+                <div style="position: absolute; top: 0px;left: 0%;width: 100%; height: 7vh;line-height: 7vh;text-align: center;color: #602603;font-size: 20px;" v-if="p.num==1" v-show="p.playing_status>1">{{p.limit_time}}</div>
+            </div>
+
+<!--            <div class="score">{{p.account_score}}</div>-->
+            <div class="bottom" onclick="all_panel(this)" :all_id="p.account_id" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 2px;overflow: hidden;">
+                <div class="bname" style="text-align: center;overflow: hidden;">{{p.nickname}}</div>
+                <div class="bscore" style="text-align: center;overflow: hidden;">{{p.account_score}}</div>
+            </div>
+<!--            <div class="quitBack" v-show="((p.account_status==6||p.account_status==7)&&p.num==1)||(p.num>1&&p.online_status==0)" ></div>-->
+
+            <!-- 玩家离开或不在线 -->
+            <div class="quitBack2" v-show="p.num>1&&p.online_status==0"><img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/off_line.png" style="width: 90%;height: 90%;margin-top: 5%;margin-left: 5%;"></div>
+
+            <!--  头像计时动画
+            <div class="colorBorder" v-bind:class="'colorBorder' + p.num" v-show="p.playing_status>1" v-bind:style="'animation:mycolor1 ' + p.limit_time + 's linear;-webkit-animation:mycolor1 ' + p.limit_time + 's linear;'">
+                <div class="backColor"  v-bind:style="'animation:mycolor2 '+ p.limit_time + 's linear;-webkit-animation:mycolor2 ' + p.limit_time + 's linear;'">
+                </div>
+            </div>
+            -->
+            <!-- 观战功能 -->
+<!--            <img src="--><!--files/images/guest/guest_avatar.png" style="position: absolute;left: 0%;width: 100%;" v-show="p.is_guest==1">-->
+
+            <div class="isReady" v-show="game.round!=game.total_num" v-if="p.num!=1">
+                <img src="http://180.188.22.245:10001/ttxindaoyou/fiesc/images/common/ready_button.png" class="unready" v-if="p.account_id==userData.accountId&&p.is_guest!=1" v-show="(p.account_status==1||p.account_status==0)&&game.status==1" v-on:click="imReady" />
+                <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/ready_text.png" class="ready" v-show="p.account_status==2" />
+            </div>
+
+<!--            <div class="cardOver" v-bind:class="'cardOver' + p.num" v-if="p.num!=1" v-show="(p.bonus||game.cardDeal==-1)&&p.account_status>1&&p.account_status!=6&&p.account_status!=7&&p.card.length>0">-->
+            <div class="cardOver" v-bind:class="'cardOver' + p.num" v-if="p.num!=1" v-show="(p.bonus||game.cardDeal==-1)&&p.account_status>1&&p.card.length>0">
+                <div class="openCard">
+                    <div class="cards card0">
+                        <div class="face front" v-bind:class="'cardPoker' + p.poker_kw"></div>
+                        <div class="face back" v-bind:class="'card' + p.card[0]"></div>
+                    </div>
+                    <div class="cards card1">
+                        <div class="face front" v-bind:class="'cardPoker' + p.poker_kw"></div>
+                        <div class="face back" v-bind:class="'card' + p.card[1]"></div>
+                    </div>
+                    <div class="cards card2">
+                        <div class="face front" v-bind:class="'cardPoker' + p.poker_kw"></div>
+                        <div class="face back" v-bind:class="'card' + p.card[2]"></div>
+                    </div>
+                    <div v-show="play_type==5" class="cards card3">
+                        <div class="face front" v-bind:class="'cardPoker' + p.poker_kw"></div>
+                        <div class="face back" v-bind:class="'card' + p.other"></div>
+                        <div id="otherPlayer"></div>
+                    </div>
+                    <div class="isQuit" v-bind:class="'isQuit' + p.num" v-show="p.account_status==6" style="z-index: 100;top: 38px;left: 50%;transform: translateX(-50%);"></div>
+                    <div class="isLose" v-bind:class="'isLose' + p.num" v-show="p.account_status==7&&!p.is_pk" style="z-index: 100;top: 38px;left: 50%;transform: translateX(-50%);"></div>
+                </div>
+
+                <div class="winText">
+                    <div class="winType" v-show="p.is_win&&p.win_show" style="left:0;font-size: 18px;width: auto;text-align:left;margin-top: -20px;padding-bottom: 10px;background:none;color: #f1c953;">{{p.win_type==5?"喜牌+":p.win_type==6&&p.WinJoy!=0?"豹子+":""}}{{p.WinJoy?p.WinJoy :""}}</div>
+                    <div class="winType" v-bind:class="'winType' + p.card_type" v-show="p.is_seen==1||p.account_status!=6" ></div>
+                    <div class="winScore" v-show="p.is_win&&p.win_show">+{{p.current_win}}</div>
+                </div>
+            </div>
+            <div v-show="p.LoseJoy&&p.lose_show && p.num != 1" class="winText">
+                <div class="winType loseType" v-bind:class="'newType' + p.num" style="left:0;font-size: 18px;width: auto;margin-top: -20px;padding-bottom: 10px;background:none;color: #f1c953;">{{p.win_type==5?"喜牌":p.win_type==6&&p.LoseJoy!=0?"豹子":""}}{{p.LoseJoy?p.LoseJoy :""}}</div>
+            </div>
+            <div class="PKbox" v-show="pk.round==1&&pkPeople.length>0&&p.is_readyPK&&(player[0].account_status==5||player[0].account_status==4)" v-on:click="choose(5,p.account_id)">
+                <div class="PKboxBack"></div>
+            </div>
+        </div>
+
+        <!-- 玩家消息  -->
+        <div v-for="p in player">
+            <div class="messageSay" v-bind:class="'messageSay' + p.num" v-show="p.messageOn">
+                <div>{{p.messageText}}</div>
+                <div class="triangle"> </div>
+            </div>
+        </div>
+
+        <!-- 倒计时时钟 position: absolute; top: 38%; left: 44%; width: 40px; height: 42px; -->
+        <div id="" class="clock" v-show="game.time>-1" style="position: absolute; top: 32%; left:50%;transform: translateX(-50%); width: 76px; height: 74px;z-index: 2;">
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/clock.png"
+                 style="position: absolute; width: 100%; height: 100%;"/>
+            <p style="position: absolute;top: 8px;left: 0px;width: 76px; height: 60px;color: #f7ce46;text-align: center;font-weight: bolder;line-height: 60px;font-size: 24px;">
+                {{game.time}}
+            </p>
+        </div>
+
+        <!-- 按键     -->
+        <div class="myButton" v-if="player[0].account_id==userData.accountId&&player[0].is_guest!=1 && player[0].playing_status==2&&pk.round==0">
+            <div class="scoreList" >
+                <div v-show="player[0].account_status==4">
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList1[0]"  v-show="game.currentScore<=scoreList1[0]" v-on:click="choose(2,scoreList1[0])"></div>
+                    <div class="scoreItem scoreItemText scoreItem50" :class="'coinType'+scoreList1[0]"  v-show="game.currentScore>scoreList1[0]"></div>
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList1[1]"  v-show="game.currentScore<=scoreList1[1]" v-on:click="choose(2,scoreList1[1])"></div>
+                    <div class="scoreItem scoreItemText scoreItem50" :class="'coinType'+scoreList1[1]"  v-show="game.currentScore>scoreList1[1]"></div>
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList1[2]"  v-show="game.currentScore<=scoreList1[2]" v-on:click="choose(2,scoreList1[2])"></div>
+                    <div class="scoreItem scoreItemText scoreItem50" :class="'coinType'+scoreList1[2]"  v-show="game.currentScore>scoreList1[2]"></div>
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList1[3]"  v-show="game.currentScore<=scoreList1[3]" v-on:click="choose(2,scoreList1[3])"></div>
+                </div>
+
+                <!-- 闷牌 -->
+                <div v-show="player[0].account_status==5">
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList2[0]" v-show="game.currentScore<=scoreList1[0]" v-on:click="choose(2,scoreList2[0])"></div>
+                    <div class="scoreItem scoreItemText scoreItem50" :class="'coinType'+scoreList2[0]" v-show="game.currentScore>scoreList1[0]"></div>
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList2[1]" v-show="game.currentScore<=scoreList1[1]" v-on:click="choose(2,scoreList2[1])"></div>
+                    <div class="scoreItem scoreItemText scoreItem50" :class="'coinType'+scoreList2[1]" v-show="game.currentScore>scoreList1[1]"></div>
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList2[2]" v-show="game.currentScore<=scoreList1[2]" v-on:click="choose(2,scoreList2[2])"></div>
+                    <div class="scoreItem scoreItemText scoreItem50" :class="'coinType'+scoreList2[2]" v-show="game.currentScore>scoreList1[2]"></div>
+                    <div class="scoreItem scoreItemText " :class="'coinType'+scoreList2[3]" v-show="game.currentScore<=scoreList1[3]" v-on:click="choose(2,scoreList2[3])"></div>
+                </div>
+            </div>
+            <!--不是换牌金花显示按钮-->
+            <div class="doubleButton" v-if="play_type!=4">
+                <div class="isOver" style="margin-top: 100px;">
+                    <div class="leftButton button" v-on:click="choose(3,1)"></div>
+                    <div class="rightButton button" v-show="game.can_open==1&&pkPeople.length>0" v-on:click="choose(4,1)"></div>
+                    <div class="rightButton1 button " v-show="game.can_open==0||pkPeople.length==0" ></div>
+                </div>
+            </div>
+
+            <!--换牌金花显示按钮-->
+            <div class="doubleButton" v-if="play_type==4">
+                <div class="isOver">
+                    <div class="swopBox">
+                        <div class="swopButton button" v-show="showSwopBtn&&game.can_look==1&&play_type==4&&swopBtnActive==false" v-on:click="swopCard()"></div>
+                        <div class="confiremSwop button" v-show="player[0].account_huan_status!=1&&swopBtnActive==true" v-on:click="choose(6)"></div>
+                    </div>
+                    <div class="leftButton button" v-on:click="choose(3,1)"></div>
+                    <!-- rightButton是比牌按钮可以点击-->
+                    <div class="rightButton button" v-show="game.can_open==1&&pkPeople.length>0" v-on:click="choose(4,1)"></div>
+                    <div class="rightButton1 button" v-show="game.can_open==0||pkPeople.length==0" ></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pkBackground" v-show="pk.round==1&&pkPeople.length>0&&(player[0].account_status==5||player[0].account_status==4)" v-on:click="quitPk">
+            <div class="pkBackText">选择比牌对象</div>
+        </div>
+
+        <!-- 换牌提示 -->
+        <div class="swopTips" style="color:#fff;font-size: 16px;position: fixed;bottom: 10%;transform: translateX(48%);-ms-transform: translateX(48%);-moz-transform: translateX(48%);-webkit-transform: translateX(48%);-o-transform: translateX(48%);text-shadow: 5px 2px 6px #000;" v-show="player[0].account_huan_status!=1&&swopBtnActive==true">
+            请选择一张牌并点击确定按钮
+        </div>
+    </div>
+
+
+    <!-- 提示  -->
+    <div class="alert" id="valert" v-show="isShowAlert">
+        <div class="alertBack"></div>
+        <div class="mainPart">
+            <div class="backImg">
+                <div class="blackImg"></div>
+            </div>
+
+            <div class="alertText">
+                <div class="rull" v-show="alertType==4"  style="font-size: 2.2vh;    margin-bottom: 0.2vh;">
+                    底分：<a>{{ruleInfo.default_score}}分</a><br>
+                    筹码：
+                    <a >{{chipList}}</a>
+                    <br>
+                    <a v-if="ruleInfo.disable_look==1||ruleInfo.disable_pk==1">规则：</a>
+                    <a v-if="ruleInfo.disable_look==1">首轮禁止看牌</a>
+                    <a v-if="ruleInfo.disable_pk==1">闷牌，全场禁止比牌</a>
+                    <a v-if="ruleInfo.disable_look==1||ruleInfo.disable_pk==1"><br></a>
+                    上限：<a v-if="ruleInfo.upper_limit>0">{{ruleInfo.upper_limit}}分</a><a v-if="ruleInfo.upper_limit==0">无</a><br>
+                    比牌：<a>>{{ruleInfo.pk_round}}轮</a><br>
+                    看牌：<a>{{ruleInfo.look_score}}分</a><br>
+                    比牌：<a>{{ruleInfo.pk_score}}分</a><br>
+                    局数：<a v-if="ruleInfo.ticket_count==1">10局</a><a v-if="ruleInfo.ticket_count==2">20局</a><br>
+                </div>
+
+                <div class="user-list" v-show="room_users != ''">
+                    房间里有
+                    <div class="join-user-info" v-for="item in room_users">
+                        <span>{{item.name}}、</span>
+                    </div>
+                    是否加入？
+                </div>
+                <div v-if="alertType==8 && add_user" style="font-size: 2.2vh">
+                    <div>你还不是房主的好友,无法加入房间</div>
+                    <div style="height: 6.6vh;">
+                        <img v-bind:src="ownerUser.avatar" style="position: relative; width: 5vh;height: 5vh;border: .1vh solid yellow;top: .5vh;">
+                        <span style="position: relative; font-size: 2.4vh;line-height: 6.6vh;height: 6.6vh;max-width: 43vw;top: -1.4vh;overflow: hidden;">{{ownerUser.nickname}}</span>
+
+                    </div>
+                </div>
+                <div>{{alertText}}</div>
+            </div>
+
+            <div v-show="alertType==2">
+                <div class="buttonLeft" v-on:click="hall">返回大厅</div>
+                <div class="buttonRight" v-on:click="hall">创建房间</div>
+            </div>
+            <div v-show="alertType==3">
+                <div class="buttonLeft" v-on:click="hall">返回大厅</div>
+                <div class="buttonRight" v-on:click="closeAlert">取消</div>
+            </div>
+
+            <!-- 观战功能 -->
+            <div v-show="alertType==4" class="button">
+
+            </div>
+
+            <div v-show="alertType==7">
+                <div class="buttonMiddle" v-on:click="hall">返回大厅</div>
+            </div>
+            <div v-show="alertType==11">
+                <div class="buttonMiddle" v-on:click="closeAlert">知道了</div>
+            </div>
+            <div v-show="alertType==21">
+                <div class="buttonMiddle" v-on:click="closeAlert">确定</div>
+            </div>
+            <div v-show="alertType==22">
+                <div class="buttonMiddle" v-on:click="closeAlert">确定</div>
+            </div>
+            <div v-show="alertType==23">
+                <div class="buttonMiddle" v-on:click="finishBindPhone()">确定</div>
+            </div>
+            <div v-show="alertType==31">
+                <div class="buttonMiddle" v-on:click="reloadView()">确定</div>
+            </div>
+            <div v-show="alertType==32">
+                <div class="buttonMiddle" v-on:click="reloadView()">重新登录</div>
+            </div>
+            <div v-if="alertType==8 && add_user" style="position: absolute;width:100%;line-height: 4.2vh;height: 4.2vh;width: 14vh;bottom: 11px;left:50%;margin-left:-7vh;text-align: center;overflow: hidden;">
+                <div v-show="applyStatus==0" style="border-radius: 2vh;background-color: #EE7942;color: #fff"  v-on:click="applyToJoin">确定</div>
+                <div v-show="applyStatus==1" style="border-radius: 2vh;background-color: #6f6363;color: #fff">申请中</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alertTip" v-show="isShowAlertTip">
+        <div class="alertTipBG"></div>
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/alertTipOk.png" v-show="alertTipType==1">
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/alertTipWarn.png" v-show="alertTipType==2">
+        <div class="alertTipText" >{{alertTipText}}</div>
+    </div>
+
+    <div v-show="isShowApply" style="color: #000;">
+        <div style="width: 100%;height: 100%;position: fixed;background: #000;z-index: 111;top: 0;"></div>
+        <div style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/back_home_box.png);background-size: 100% 100%;position: fixed;top: 50%;left: 50%;z-index: 111;transform: translate(-50%,-50%);    width: 76vw;height: 30vh">
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/btn_close.png" style="position: absolute;right: -3vw;top: -2vh;width: 10vw;" @click="hall">
+            <div style="margin-top: 5vh;text-align: center;">你不是该俱乐部成员，无法加入房间</div>
+            <div style="position: relative;height: 10vh;">
+                <img :src="applyInfo.club_headimgurl" style="width: 12vw;position: absolute;left: 18vw;top: 50%;transform: translateY(-50%);">
+                <span style="position: absolute;left: 34vw;top: 50%;transform: translateY(-50%);">{{applyInfo.club_name}}</span>
+            </div>
+            <div style="text-align: center">是否申请加入俱乐部？</div>
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/line.jpg" style="    position: absolute;left: 50%;transform: translateX(-50%);margin-top: 1vh;width: 84%;">
+            <div style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/btn_bg.png);background-size: 100% 100%;width: 24vw;height: 4vh;position: relative;top: 2.5vh;left: 50%;transform: translateX(-50%);color: #fff;text-align: center;line-height: 4vh;font-size: 16px;" @click="applyClub()">
+                {{applyInfo.status}}
+            </div>
+        </div>
+    </div>
+
+    <!--  PK  -->
+    <div class="playerPK" v-show="pk.round>1">
+        <div class="pkBack" ></div>
+        <div class="pk1" >
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/flower/comLeft.png" style="position: absolute;top:0;left:0;width:100%;height:100;">
+            <div class="pkPlayer">
+                <img v-bind:src="pk1.headimgurl" class="avatar">
+                <div class="score">{{pk1.nickname}}</div>
+            </div>
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/comLoser.png" v-show="pk.round==4&&pk1.account_status==7" class="pkLoser" />
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/comWiner.png" v-show="pk.round==4&&pk1.account_status!=7" class="pkLoser" />
+        </div>
+        <div class="pk2">
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/flower/comRight.png" style="position: absolute;top:0;right:0;width:100%;height:100%;">
+            <div class="pkPlayer">
+                <img v-bind:src="pk2.headimgurl" class="avatar">
+                <div class="score">{{pk2.nickname}}</div>
+            </div>
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/comLoser.png" v-show="pk.round==4&&pk2.account_status==7" class="pkLoser" />
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/comWiner.png" v-show="pk.round==4&&pk2.account_status!=7" class="pkLoser" />
+        </div>
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/flower/comE.gif" v-show="pk.round==3" class="pkE" />
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/flower/pk.png" v-show="pk.round>2" class="pkV" />
+    </div>
+
+    <!-- 新消息  -->
+    <div class="chat-list-mask" v-on:click="hideMessage" v-show="isShowNewMessage"></div>
+    <div class="chat-list1" id="newmessage-box" v-show="isShowNewMessage">
+        <ul class="chat-list-ul1">
+            <li v-on:click="messageOn(0)">快点吧，我等到花儿也谢了</li>
+            <li v-on:click="messageOn(1)">我出去叫人</li>
+            <li v-on:click="messageOn(2)">你的牌好靓哇</li>
+            <li v-on:click="messageOn(3)">我当年横扫澳门九条街</li>
+            <li v-on:click="messageOn(4)">算你牛逼</li>
+            <li v-on:click="messageOn(5)">别吹牛逼，有本事干到底</li>
+            <li v-on:click="messageOn(6)">输得裤衩都没了</li>
+            <li v-on:click="messageOn(7)">我给你们送温暖了</li>
+            <li v-on:click="messageOn(8)">谢谢老板</li>
+            <li v-on:click="messageOn(9)">我来啦，让你们久等了</li>
+            <li v-on:click="messageOn(10)">我出去一下，马上回来，等我哦</li>
+            <li v-on:click="messageOn(11)">怎么断线了，网络太差了</li>
+            <li v-on:click="messageOn(12)">搏一搏，单车变摩托</li>
+        </ul>
+    </div>
+    <!-- 消息     -->
+    <!--<div class="message" v-show="isShowMessage" >
+        <div class="messageBack" v-on:click="hideMessage"></div>
+        <div class="textPartOuter"></div>
+        <div id="message-box" class="textPart" v-bind:style="'height: ' + 0.39 * height + 'px;'">
+            <div class="outline"></div>
+            <div id="scroll-box" class="textList" style="width: 100%;">
+                <div class="textItem" v-for="m in message" v-on:click="messageOn(m.num)">{{m.text}}</div>
+                <div class="textItem" style="height: 5px;background: #434547;"></div>
+            </div>
+        </div>
+    </div>-->
+
+
+    <div class="rules-daoyou-mask" v-show="ruleInfo.isShowNewRule" v-on:click="cancelGameRule">
+        <div class="content">
+            <div class="rule-title">游戏规则</div>
+            <div class="niuniu-rules">
+                <div class="flex-cont" data-pos="0">
+                    <div class="name">底分：</div>
+                    <div class="flex-item"><span>{{ruleInfo.default_score}}分</span></div>
+                </div>
+                <div class="flex-cont" data-pos="1">
+                    <div class="name">筹码：</div>
+                    <div class="flex-item"><span>{{chipList}}</span></div>
+                </div>
+                <div class="flex-cont" data-pos="2">
+                    <div class="name">规则：</div>
+                    <div class="flex-item">
+                        <span v-if="ruleInfo.disable_look==1">首轮禁止看牌<br></span>
+                        <span v-if="ruleInfo.disable_pk==1">闷牌，全场禁止比牌<br></span>
+                        <span v-if="ruleInfo.is_qp_tp==1">大赢家摊牌<br></span>
+                        <span v-if="ruleInfo.has235==1">235吃豹子</span>
+                    </div>
+                </div>
+                <div class="flex-cont" data-pos="3">
+                    <div class="name">上限：</div>
+                    <div v-if="ruleInfo.upper_limit==0" class="flex-item"><span>无</span></div>
+                    <div v-if="ruleInfo.upper_limit==500" class="flex-item"><span>500分</span></div>
+                    <div v-if="ruleInfo.upper_limit==1000" class="flex-item"><span>1000分</span></div>
+                    <div v-if="ruleInfo.upper_limit==2000" class="flex-item"><span>2000分</span></div>
+                </div>
+                <div class="flex-cont" data-pos="4">
+                    <div class="name">看牌：</div>
+                    <div class="flex-item"><span>{{ruleInfo.look_score}}分</span></div>
+                </div>
+                <div class="flex-cont" data-pos="5">
+                    <div class="name">比牌：</div>
+                    <div class="flex-item"><span>>{{ruleInfo.pk_round}}轮</span></div>
+                </div>
+                <div class="flex-cont" data-pos="6">
+                    <div class="name">比牌：</div>
+                    <div class="flex-item"><span>>{{ruleInfo.pk_score}}分</span></div>
+                </div>
+                <div class="flex-cont" data-pos="7">
+                    <div class="name">局数：</div>
+                    <div class="flex-item"><span>{{game.total_num}}局</span></div>
+                </div>
+
+            </div>
+            <div class="rules-bottom"></div>
+            <!--            <div class="close" v-on:click="cancelGameRule"></div>-->
+        </div>
+    </div>
+    <!-- 游戏规则-->
+    <!--<div class="createRoom" id="vroomRule" v-show="ruleInfo.isShowRule" v-on:click="cancelGameRule">
+        <div class="createRoomBack"></div>
+        <div class="mainPart" >
+            <div  class="createB"></div>
+            <div class="createTitle">
+                <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/txt_rule.png" />
+            </div>
+
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/cancel.png" class="cancelCreate" v-on:click="cancelGameRule"/>
+
+            <div class="blueBack">
+
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">底分：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;">
+                            <div class="selectText" >{{ruleInfo.default_score}}分</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">筹码：</div>
+                    <div class="selectList" >
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.chip_type==1">
+                            <div class="selectText" >2/4,4/8,8/16,10/20</div>
+                        </div>
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.chip_type==2">
+                            <div class="selectText" >2/4,5/10,10/20,20/40</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="selectPart" v-bind:style="'height:' + ruleInfo.rule_height + 'px;line-height:30px;padding:6px 0;'" v-if="ruleInfo.disable_look==1 || ruleInfo.disable_pk==1">
+                    <div class="selectTitle">规则：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.disable_look==1">
+                            <div class="selectText" >首轮禁止看牌</div>
+                        </div>
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.disable_pk==1">
+                            <div class="selectText" >闷牌，全场禁止比牌</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">上限：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.upper_limit==0">
+                            <div class="selectText" >无</div>
+                        </div>
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.upper_limit==500">
+                            <div class="selectText" >500分</div>
+                        </div>
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.upper_limit==1000">
+                            <div class="selectText" >1000分</div>
+                        </div>
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.upper_limit==2000">
+                            <div class="selectText" >2000分</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">看牌：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;">
+                            <div class="selectText" >{{ruleInfo.look_score}}分</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">比牌：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;">
+                            <div class="selectText" >>{{ruleInfo.pk_round}}轮</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">比牌：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;">
+                            <div class="selectText" >{{ruleInfo.pk_score}}分</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="selectPart" style="height:30px;line-height:30px;padding:6px 0;">
+                    <div class="selectTitle">局数：</div>
+                    <div class="selectList">
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.ticket_count==1">
+                            <div class="selectText" >10局X1张门票</div>
+                        </div>
+                        <div class="selectItem" style="margin-left:12px;" v-if="ruleInfo.ticket_count==2">
+                            <div class="selectText" >20局X2张门票</div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="createCommit" v-on:click="cancelGameRule" >确定</div>
+
+            </div>
+        </div>
+    </div>-->
+
+    <!-- 设置音频 -->
+    <div class="audioRoom-pj" id="vaudioRoom" v-show="editAudioInfo.isShow">
+        <div class="audioRoomBack" v-on:click="cancelAudioSetting"></div>
+        <div class="mainPart">
+            <div class="createB"></div>
+            <div class="createTitle" style="height:4vh;">
+            </div>
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/icon-close.png" class="cancelCreate"
+                 v-on:click="cancelAudioSetting"/>
+
+            <div class="blueBack">
+                <div style="height:0.5vh;"></div>
+
+                <div class="selectPart">
+                    <div class="selectTitle">背景音乐：</div>
+                    <div class="selectBox" v-on:click="setBackMusic">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/vol-full.png" v-show="editAudioInfo.backMusic==1">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/vol-empty.png" v-show="editAudioInfo.backMusic!=1">
+                    </div>
+                    <div class="selectText" v-on:click="setBackMusic">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/bg-sound-true.png" v-show="editAudioInfo.backMusic==1">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/bg-sound-false.png" v-show="editAudioInfo.backMusic!=1">
+                    </div>
+                </div>
+                <div class="selectPart">
+                    <div class="selectTitle">游戏音效：</div>
+                    <div class="selectBox" v-on:click="setMessageMusic">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/vol-full.png" v-show="editAudioInfo.messageMusic==1">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/vol-empty.png" v-show="editAudioInfo.messageMusic!=1">
+                    </div>
+                    <div class="selectText" v-on:click="setMessageMusic">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/music-true.png" v-show="editAudioInfo.messageMusic==1">
+                        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/music-false.png" v-show="editAudioInfo.messageMusic!=1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--gift-->
+<div class="giftBox" v-show="isShowGiftBox" style="background-image: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/shop_bg2.png)" >
+    <div style="height: 0.45rem;position: relative;">
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/title.png" style="position: absolute;left: 50%;transform: translateX(-50%);width: 22vw;top: 2vw;">
+    </div>
+    <div style="position: relative;height: 0.7rem;font-size: 16px;">
+        <img :src="opAccountInfo.headimgurl" style="width: 14vw;position: absolute;left: 6vw;top: 1vw;border-radius: 6px;border: 3px solid #786560;">
+        <img :src="'http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/sex'+opAccountInfo.sex+'.png'" style="position: absolute;width: 6vw;left: 22vw;top: 2px;">
+        <span style="position: absolute;left: 28vw;top: 4px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 38vw;">{{opAccountInfo.nickname}}</span>
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/love.png" style="position: absolute;width: 6vw;top: 25px;left: 22vw;">
+        <span style="position: absolute;left: 28vw;top: 25px;">魅力值: <span style="color: #d58862;">{{opAccountInfo.charm_val}}</span></span>
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/liwu.png" style="position: absolute;width: 6vw;top: 46px;left: 22vw;">
+        <span style="position: absolute;left: 28vw;top: 48px;">礼物总数: <span style="color: #d58862;">{{opAccountInfo.gift_num}}</span></span>
+    </div>
+    <div class="bgScroll" style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/box_bg2.png) no-repeat;background-size: 100% 100%;">
+        <div style="margin-top: 16px;">
+            <div class="giftItem" v-on:click="sendGit(item.skin_kw,item.use_num,item.per_ticket_num)" v-for="item in giftToolsList" style="background-image: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/item_bg.png);background-size: 100% 100%;">
+                <div style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/shop/love_bg.png) no-repeat;background-size: 100% 100%;  width: 40px;height: 14px;position: absolute;right: 0px;top: 6px;color: #c7415f;font-size: 12px;text-align: center;line-height: 14px;text-indent: 10;">
+                    {{parseInt(item.charm_val)>=0?'+':''}}{{item.charm_val}}
+                </div>
+                <div style="width: 100%;height: 60px;position: absolute;top: 0;overflow: hidden;">
+                    <img class="giftPic" :class="giftName[item.skin_kw]" :src="'http://180.188.22.245:10001/ttxindaoyou/files/giftShop_dy/'+ giftName[item.skin_kw] + '/armatureName_' + giftName[item.skin_kw] + '_static.png?v=11'"/>
+                </div>
+                <div style="position: absolute;bottom: 1.5vw;width: 100%;color: #e7d27b;border-radius: 7px;text-align: center;font-size: 12px;">{{item.per_ticket_num==0?'免费':item.per_ticket_num}}</div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+</div>
+<div class="giftBg" v-on:click="sendGitViewHide()" v-show="isShowGiftBox"></div>
+
+<!--表情-->
+<!--<div v-show="isShowFeel" class="feelBox">-->
+<!--    <div class="swiper-container">-->
+<!--        <div class="swiper-wrapper">-->
+<!--            <div class="swiper-slide">Slide 1</div>-->
+<!--            <div class="swiper-slide">Slide 2</div>-->
+<!--            <div class="swiper-slide">Slide 3</div>-->
+<!--            <div class="swiper-slide">Slide 4</div>-->
+<!--            <div class="swiper-slide">Slide 5</div>-->
+<!--            <div class="swiper-slide">Slide 6</div>-->
+<!--            <div class="swiper-slide">Slide 7</div>-->
+<!--            <div class="swiper-slide">Slide 8</div>-->
+<!--            <div class="swiper-slide">Slide 9</div>-->
+<!--            <div class="swiper-slide">Slide 10</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/canvas.js" ></script>
+</div>
+
+
+</body>
+
+<script src="http://180.188.22.245:10001/ttxindaoyou/jweixin-1.0.0.js" ></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/bscroll.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/velocity.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/vue.min.js" ></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/vue-resource.min.js" ></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/game/z6.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/giftFunc_dy.js?v=bs221"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/gitView_daoyou.js?v=1s2323"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/clipboard.min.js"></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/fuzhi_xl.js?v=2021809172"></script>
+<script type="text/javascript">
+    // document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    //     // 通过下面这个API隐藏右上角按钮
+    //     WeixinJSBridge.call('hideOptionMenu');
+    // });
+    document.getElementById('tablemark').src="http://180.188.22.245:10001/ttxindaoyou/table_mark/"+obj.data.dt+".png";
+
+</script>
+</html>

@@ -1,0 +1,196 @@
+<html>
+<head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>战绩查询</title>
+    <link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/review_dpj_dy.css?v=s12">
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="/js/config.js?v='+ new Date().getTime() +'"> <\/script>');
+    </script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/load.js"></script>
+    <script type="text/javascript">
+
+        // window.addEventListener('load', function() {
+        //     FastClick.attach(document.body);
+        // }, false);
+        // var per = window.innerWidth / 530;
+        var game_type = DynLoading.getUrlParam("type");
+        var room_number = DynLoading.getUrlParam("num");
+
+        var obj = DynLoading.hall(BaseUrl  + '/game/queryCard?type=' + game_type + '&num=' + room_number);
+        if(obj.result != 0){
+            alert(obj.result_message);
+            var return_url = window.location.href;
+            console.log(return_url);
+            window.location.href = '/index.html?return_url=' + return_url + '&t=' + obj.data.t;
+        }
+
+        var roomUrl = Htmls.getRoomUrl(game_type, obj.data.max_count, obj.data.uni_hex);
+        roomUrl = roomUrl + '&wid=' + obj.data.wid;
+
+      var globalData = {
+          "baseUrl": BaseUrl + "/",
+          "fileUrl": "http://180.188.22.245:10001/ttxindaoyou/",
+          "scoreInfo": eval('(' + obj.data.score_info + ')'),
+    };
+        globalData.wid = obj.data.wid; globalData.tt = obj.data.tt;
+    var configData = {
+        "appId":obj.data.config_ary.appId,
+        "timestamp":obj.data.config_ary.timestamp,
+        "nonceStr":obj.data.config_ary.nonceStr,
+        "signature":obj.data.config_ary.signature,
+    };
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            // 通过下面这个API隐藏右上角按钮
+            WeixinJSBridge.call('hideOptionMenu');
+        });
+
+        //// 修改浏览器title
+        //var new_userName = "";
+        //var old_userNname = "//";
+        //if (old_userNname.length > 8) {
+        //    new_userName = old_userNname.substring(0, 7);
+        //    new_userName += "..."
+        //} else {
+        //    new_userName = old_userNname;
+        //}
+        //document.getElementsByTagName("title")[0].innerText = new_userName + "|" + globalData.hallName;
+    </script>
+
+
+</head>
+
+<body style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/bg.jpg); position: fixed;left: 0; top: 0; padding: 0;margin: 0;background-size: 100% 100%;width: 100vw;height: 100vh;">
+
+<div id="loading" style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000" >
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/loading.gif" style="top: 40%;position: absolute;left: 50%;margin-left: -45px;margin-top: -45px;" />
+</div>
+
+<audio id="media" v-show="false" autostart="false" src="http://180.188.22.245:10001/ttxindaoyou/files/audio/paijiu/xy_button.mp3"></audio>
+
+<div class="main" id="app-main" style="position: relative; width: 100%;margin: 0 auto; display: none;">
+    <img style="position: fixed;width: 14vw;top: 2vh;left: 10px;z-index: 1;" class="bottomHome"
+         src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/back2.png" v-on:click="gotoHall()"/>
+
+    <div style="color: #fefeba;font-size: 1.8rem;text-align: center;line-height: 10vh;height: 10vh;">对战明细</div>
+
+    <div style="width: 96vw;margin-top: 5px;background-color: rgba(74, 152, 220,0.9);font-size: 2.2vh;text-align: left;color: #000;border-radius: 5px;padding: 1vw;margin-left: 1vw;">
+        <span style="float: left;">房间号: {{globalData.roomNumber}}</span>
+        <span style="float: right;">结束时间: {{ruleEndTime}}</span>
+        </br>
+        <span style="text-align: left;">{{ruleText}}</span>
+    </div>
+
+    <!--    <div  style="width: 100%;overflow: auto;text-align: center;color: white;overflow:hidden;" >-->
+    <!--        <div v-for="item in gameScoreList" style="position: relative;width: 100%;padding: 10px 0 10px 0;height: 14vw;background-color: #291c4d;text-align: center;margin-top: 0.3vh;color: white;overflow:hidden;">-->
+    <!--            <div>-->
+    <!--                <img v-bind:src="item.avatar" style="position: absolute;top:2vw;left:1vw;width:12vw;height:12vw;border-radius:3px">-->
+    <!--            </div>-->
+    <!---->
+    <!--            <div  style="position: absolute;left: 15vw;width: 55vw;height: 14vw;text-align: left;">-->
+    <!--                <div style="height: 6vw;font-size: 2.2vh;">{{item.name}}</div>-->
+    <!--                <div style="height: 5vw; font-size: 1.8vh;color: rgb(150,180,80);" >ID:{{item.code}}</div>-->
+    <!--            </div>-->
+    <!---->
+    <!--            <div style="position: absolute;right: 5vw;height: 14vw;line-height: 14vw;font-size: 2.5vh;text-align: left;color: orange;">-->
+    <!--                <span style="font-size: 3vh">{{item.score}}</span>-->
+    <!--            </div>-->
+    <!---->
+    <!--        </div>-->
+    <!--    </div>-->
+
+
+    <a  href="javascript:window.location.href = roomUrl" style="background:url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/ranking.png);background-size: 100% 100%; height: 16vw;width: 16vw;position: fixed; right: 1vw;top: 0vw;"></a>
+
+
+    <div  style="left: 0;width: 100%;height: 74vh;overflow-y: scroll;" >
+        <div v-for="(item,index) in gameDetailList" v-bind:style="'position: relative;width: 100%;text-align: center;margin-top: 1px;color: white;overflow:hidden;'">
+
+            <div @click="showDetail(index)" style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/item-bg.png);background-size: 100% 100%; position: relative;top: 0vw;left: 1vw;width: 98vw;height: 8vh;line-height: 8vh; font-size: 22px;color: #000;text-align: left;">
+                <span style="position: absolute;left: 4vw;">局数：{{item.gnum}}/{{item.tnum}}</span>
+                <span style="position: absolute;left: 50%;transform: translateX(-50%);">积分</span>
+                <span style="position: absolute;right: 14vw;color: #38ca25;">{{item.my_score}}</span>
+                <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/arrow.png" style="position: absolute;right: 3vw;width: 4vw;top: 50%;transform: translateY(-50%);">
+            </div >
+            <div v-show="item.show_detail">
+                <div style="position: relative;left: 1vw;width: 98vw;height: 8vw;background: #9e8d74;font-size: 2vh;line-height: 10vw;border-radius: 4px;text-align: center;color: #000;">
+                    <div style="position: absolute;left: 0vw;width: 28vw">
+                        玩家
+                    </div>
+                    <div style="position: absolute;left: 28vw;width: 36vw;">
+                        牌型
+                    </div>
+                    <div style="position: absolute;left: 66vw;width: 13vw;">
+                        倍数
+                    </div>
+                    <div style="position: absolute;left: 75vw;width: 21vw;text-align: right;">
+                        积分
+                    </div>
+                </div>
+
+                <div  style="position: relative;width: 98vw;left: 1vw;overflow: auto;" >
+                    <div v-for="row in item.detail" style="position: relative;width: 100%;height: 4rem;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/item-bg.png);background-size: 100% 100%;text-align: center;color: white;overflow:hidden;">
+                        <div style="position: absolute;left: 0vw;width: 30vw;height: 4rem;line-height: 4rem;font-size: 2vh;text-align: center;">
+                            <div style="position: absolute;top: 50%;transform: translateY(-50%);left: 2vw;width: 11vw;height: 11vw;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
+                                <img :src="player_avatar[row.account_id]" style="position: absolute;top: 0.5vw;left: 0.5vw;width: 10vw;height: 10vw;">
+                                <img v-if="row.is_banker==1" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/ranking/banker_icon.png" style="position: absolute; top: -1vw;right: -3vw;width: 6.5vw;height: 6vw;">
+                            </div>
+                            <div style="position: absolute;top: 50%;transform: translateY(-50%);left: 15vw;width: 13vw;text-align: left;word-wrap:break-word;line-height: 5vw;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;">{{row.name}}</div>
+                        </div>
+
+                        <div v-if="row.is_join==1">
+                            <div style="position: relative;left: 28vw;width: 37vw;height: 4rem;text-align: left;font-size: 0.8rem;">
+                                <span style="position: absolute;text-align: center;color: rgb(150, 180, 80);top: 3vw;">{{row.card_type_str1}}</span>
+                                <span style="position: absolute;bottom: 3vw;text-align: center;color: rgb(150, 180, 80);">{{row.card_type_str2}}</span>
+
+                                <div class="cardOver" style="position: relative; width: 100%; height: 100%;">
+                                    <div class="cards41 cards card41" style="z-index: 11">
+                                        <div class="face back" v-bind:class="'card' + row.cards[0]"></div>
+                                    </div>
+                                    <div class="cards31 cards card31" style="z-index: 10">
+                                        <div class="face back" v-bind:class="'card' + row.cards[1]"></div>
+                                    </div>
+                                    <div class="cards21 cards card21" style="z-index: 11">
+                                        <div class="face back" v-bind:class="'card' + row.cards[2]"></div>
+                                    </div>
+                                    <div class="cards11 cards card11" style="z-index: 10">
+                                        <div class="face back" v-bind:class="'card' + row.cards[3]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="position: absolute;left: 66vw;top: 0;width: 13vw;height: 4rem;line-height: 4rem;font-size: 2vh;text-align: center;color: #fff;">
+                                <span style="color: #fff;">{{row.multiple}}倍</span>
+                            </div>
+                            <div style="position: absolute;top: 0;left: 75vw;width: 21vw;height: 4rem;line-height: 4rem;font-size: 2.5vh;text-align: right;">
+                                <span :style="row.score<=0?'color: #53f867':'color: #d56820'">{{row.score}}</span>
+                            </div>
+                        </div>
+                        <div v-if="row.is_join==0" style="font-size: 2vh; color: rgb(150,180,80);">本局未参战</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/jquery-1.9.1.min.js"></script>
+<script src="http://180.188.22.245:10001/ttxindaoyou/jweixin-1.0.0.js" ></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/vue.min.js" ></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/vue-resource.min.js" ></script>
+<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/log/review_dpj_daoyou.js"></script>
+<script>
+    $(document).on('click', 'img', function(e){
+        e.preventDefault();
+    })
+</script>
+
+</html>

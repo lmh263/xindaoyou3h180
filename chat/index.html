@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>聊天室</title>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name=full-screen content=yes>
+    <meta name=x5-fullscreen content=true>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/wx.js></script>
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="/js/config.js"> <\/script>');
+        document.write('<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/load.js"> <\/script>');
+    </script>
+    
+    <script>// 聊天室
+        //v3
+
+        var obj = DynLoading.hall(BaseUrl + '/chat/index');
+
+        var phpVhref = '';
+        var phpBrowser = '';
+        var phpIsWx = '0';
+        var phpIsXl = '0';
+        var phpWxUrl = 'dy-1303893001.cos.ap-chongqing.myqcloud.com';
+        var phpWxIp = obj.ws;
+        var phpWxPort = '443';
+        var PhpAurl = BaseUrl;
+        var wxConfig = '{"debug":false,"beta":false,"jsApiList":["startRecord","stopRecord","onVoiceRecordEnd","playVoice","pauseVoice","stopVoice","onVoicePlayEnd","uploadVoice","downloadVoice"],"appId":"wxdafedcb7e2755c5d","nonceStr":"xP5rTBlYaG","timestamp":1605471443,"url":"http:\/\/xdy.cqtwnz.cn:443\/chat\/index","signature":"866d60ad66ab459094b9e4cb42c2bc35278b19ab"}';
+        var tk = 't_18247_b_be7ad6d3ec9348089d945ea8beeaf00b9';
+        window.localStorage.setItem('token', tk);
+        var group_id = obj.club_id;
+        var baseUrl = window.location.origin+'/';
+        var hallName = obj.title;
+
+        document.title=obj.title
+
+        function index_GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[ 2 ]); return null;
+        };
+
+
+
+
+        var wxConfig = '{"debug":false,"beta":false,"jsApiList":["startRecord","stopRecord","onVoiceRecordEnd","playVoice","pauseVoice","stopVoice","onVoicePlayEnd","uploadVoice","downloadVoice"],"appId":"wx6d62309386e8bf3b","nonceStr":"wajxlxgUE3","timestamp":1585164328,"url":"http:\/\/wx.g6j7mc.top\/chat\/room?mid=228","signature":"60a66592468ee0dbf5c2ae3ef4c0bd633a46eff9"}';
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady()
+        {
+            // 通过下面这个API隐藏右上角按钮
+            WeixinJSBridge.call('hideOptionMenu');
+        });</script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/rw.js></script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/q.js></script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/aes.js></script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/aesjj.js></script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/md5.js></script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/utf.js></script>
+    <script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/jquery.qrcode.js></script>
+    <style>
+        .content {
+            padding-bottom: 40px;
+            background-color: #fff;
+        }
+    </style>
+    <link
+        href=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/v3/static/css/app.b45c646ee20993735ed98b032ca94b83.css
+        rel=stylesheet>
+</head>
+
+<body>
+    <div id=app></div>
+    <div class=images></div>
+    <script type=text/javascript src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/manifest.e662d2eaedc6c57932c5.js></script>
+    <script type=text/javascript
+        src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/v3/static/js/vendor.6ecd40b864f0e8680fa6.js></script>
+    <script type=text/javascript src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/app.16046541d4a9de0084a8.js></script>
+</body>
+<script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/hc.js></script>
+<script src=http://180.188.22.245:10001/ttxindaoyou/xinshenshou/chat/super_chat/js/cb.js></script>
+<script>var el = document.createElement("textarea");
+    el.setAttribute("readonly", "readonly");
+    el.setAttribute("id", "copy");
+    el.style.position = "absolute";
+    el.style.fontSize = "12px";
+    el.style.left = "-99999px";
+    document.body.appendChild(el);</script>
+
+</html>

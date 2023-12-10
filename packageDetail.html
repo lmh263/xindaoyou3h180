@@ -1,0 +1,795 @@
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <title>房卡包</title>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/angular.min.js"></script>
+    <script src="http://180.188.22.245:10001/ttxindaoyou/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/fastclick.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/clipboard.min.js"></script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/files/js/fuzhi_xl.js?v=20118029172"></script>
+
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="/js/config.js"> <\/script>');
+        document.write('<script type="text/javascript" src="http://180.188.22.245:10001/ttxindaoyou/js/load.js"> <\/script>');
+    </script>
+
+    <style>
+        .pointBag {
+        }
+
+        .pointBox {
+            filter: alpha(opacity=50); /*IE*/
+            -moz-opacity: 50; /*FireFox*/
+            opacity: 0.5;
+            background: #000;
+            border-radius: 8px;
+            width: 160px;
+            height: 160px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-left: -80px;
+            margin-top: -80px;
+        }
+
+        .pointIcon {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-left: -42px;
+            margin-top: -70px;
+        }
+
+        .pointTxt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            color: #fff;
+            font-size: 18px;
+            margin-top: 30px;
+            width: 160px;
+            margin-left: -80px;
+        }
+
+        .pointIcon2 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            float: left;
+            margin-left: -50px;
+            margin-top: -70px;
+        }
+
+        .copy-tip {
+            background: rgba(0, 0, 0, .6);
+            color: #fff;
+            position: fixed;
+            top: 50vh;
+            font-size: .9rem;
+            border-radius: 5px;
+            padding: 10px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 89;
+        }
+
+        #room_str {
+            position: fixed;
+            top: -300px;
+        }
+
+        .zhuonuo {
+            position: fixed;
+            right: 0.5rem;
+            width: 3rem;
+            z-index: 89;
+            top: 1rem;
+        }
+
+        #dialog {
+            position: fixed;
+            width: 300px;
+            height: 150px;
+            padding: 10px;
+            box-sizing: border-box;
+            background: #fff;
+            font-size: 16px;
+            left: 50%;
+            top: 50%;
+            margin-left: -150px;
+            margin-top: -75px;
+            border-radius: 10px;
+            z-index: 99;
+        }
+
+        #dialog .main {
+            word-wrap: break-word;
+            word-break: normal;
+        }
+
+        #dialog .other {
+            text-align: center;
+            margin-top: 30px
+        }
+
+        #dialog img {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 35px;
+        }
+
+        .btnOpen {
+            position: absolute;
+            width: 36vw;
+            height: 17vh;
+            left: 50%;
+            top: 48vh;
+            transform: translateX(-50%);
+            animation: btnOpen 2s infinite;
+        }
+
+        @keyframes btnOpen {
+            0% {
+                width: 34vw;
+                height: 15vh;
+            }
+            50% {
+                width: 44vw;
+                height: 20vh;
+            }
+            100% {
+                width: 34vw;
+                height: 15vh;
+            }
+        }
+
+        .light {
+            position: absolute;
+            width: 55vw;
+            height: 30vh;
+            left: 50%;
+            top: 41vh;
+            margin-left: -26vw;
+            transform: translateX(-50%);
+            animation: light 1.5s linear infinite;
+        }
+
+        @keyframes light {
+            from {
+                transform: rotate(0deg)
+            }
+            to {
+                transform: rotate(359deg)
+            }
+        }
+
+        .backToHall {
+            position: fixed;
+            left: 0.5rem;
+            width: 3rem;
+            z-index: 89;
+            top: 1rem;
+        }
+    </style>
+</head>
+<link rel="stylesheet" type="text/css" href="http://180.188.22.245:10001/ttxindaoyou/files/css/activity.css">
+
+<body ng-controller="myCtrl"
+      style="background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/package_bg.jpg);background-size: 100% 100%;">
+<div style="position: fixed;width:100%;height:100%;top:0;left:0;background: #000" id="loading">
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/loading.gif"
+         style="top: 40%;position: absolute;left: 50%;margin-left: -45px;margin-top: -45px;"/>
+</div>
+<div class="main" style="display: none;">
+
+    <div id="dialog" style="display:none">
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/common/cancel.png" onclick="fuzhiMain.closeDialog()">
+        <p id="main" class="main">
+        </p>
+        <p class="other">
+            请手动复制
+        </p>
+    </div>
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/common/back3.png" class="backToHall" ng-click="backToHall()">
+
+    <span class="copy-tip" id="tips" style="display:none">已复制到剪贴板</span>
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/club/btn_copy.png" class="needsclick zhuonuo copyUrl"
+         data-clipboard-action="copy" id="copy_btn" onclick="fuzhiMain.link()"/>
+    <textarea id="room_str" readonly="readonly"></textarea>
+
+    <!--<img src="http://180.188.22.245:10001/ttxindaoyou/files/images/redpackage/redpackage_bg.jpg" style="width: 100%;position: relative;" usemap="#planetmap" />-->
+
+    <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/redpackage/fly.png" style="width: 100%;margin-top:15%"
+         usemap="#planetmap"/>
+    <div id="notopen" style="position: fixed;height: 100vh;width: 100vw;top: 0;left: 0;">
+
+        <div class="user"
+             style="position: absolute;width: 17.5vw;height: 17.5vw;left: 50%;top: 3vh;transform: translateX(-50%);background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
+            <img ng-src="{{redPackage.sendAvatar}}" class="avatar"
+                 style="position: absolute;width: 16vw;top: 0.5vw;height: 16vw;left: 50%;transform: translateX(-50%);"/>
+        </div>
+
+        <p style="position: absolute; color: #fedf00; width: 90%; left: 5%; top: 14vh; height: auto; text-align: center; font-size: 17pt; word-wrap: break-word; word-break: break-all;">
+            <span style="color: #fff;">{{redPackage.sendName}}</span>
+            <br/>
+            给你发了一个房卡包
+        </p>
+
+
+        <div ng-click="clickOpenRedPackage()">
+            <img class="light" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/light.png"/>
+            <img class="btnOpen" src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/package_box.png"/>
+        </div>
+        <!-- <div  style="position: absolute; height: {{width * 1.02 / 1.8 / 5.1}}px; width: {{width * 1.02 / 1.8}}px; left: {{(rpWidth - width * 1.02 / 1.8) / 2}}px; top: {{rpHeight * 0.45}}px;" ng-click="clickOpenRedPackage()">
+            <img id="openImg" src="http://file.szlangya.cn/files/images/redpackage/redpackage_get_btn.png" style="width: 100%;position: relative;height:100%; " />
+        </div>  -->
+
+        <div style=" position: absolute; left: 22px; right: 22px; top: {{height - 160}}px;">
+            <p style="text-align: center; color: #fff; font-size: 11pt"></p>
+        </div>
+    </div>
+
+    <div id="ropen" style="position: fixed;height: 100vh;width: 100vw;top: 0;left: 0; display: none;">
+        <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/package_bg2.jpg" style="width: 100%;height:50vh"/>
+
+        <div class="user"
+             style="position: absolute;width: 17.5vw;height: 17.5vw;left: 50%;top: 6vh;transform: translateX(-50%);background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
+            <img ng-src="{{redPackage.sendAvatar}}" class="avatar"
+                 style="position: absolute;width: 16vw;top: 0.5vw;height: 16vw;left: 50%;transform: translateX(-50%);"/>
+        </div>
+
+        <p style="position: absolute; color: #fff; width: 90%; left: 5%; top: 17vh; text-align: center; font-size: 16pt;">来自 {{redPackage.sendName}} 的房卡红包</p>
+
+        <p style="position: absolute; color: #fdcb00; width: 90%; left: 5%; top: 28vh; text-align: center; font-size: 44pt;">{{redPackage.count}} <span style="font-size: 16pt;">张</span></p>
+
+        <p style="position: absolute; color: #fff; width: 90%; left: 5%; top: 40vh; text-align: center; font-size: 18pt;">可用于创建房间</p>
+
+        <p style="position: fixed; width: 100vw; height: 50vh;top: 50vh; left: 0;font-size: 11pt; color: black; text-align: left; background: #fff;">
+            <div class="user"
+                 style="position: absolute;width: 15.5vw;height: 15.5vw;left: 6vw;top: 56vh;background: url(http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/page/avatar_box.png);background-size: 100% 100%;">
+                <img ng-src="{{redPackage.receiveAvatar}}" class="avatar" style="position: absolute;width: 14vw;top: 0.5vw;height: 14vw;left: 50%;transform: translateX(-50%);"/>
+            </div>
+            <br/>
+            <span style="color: lightgray;position:absolute; right: 6vw;top: 62vh;">{{redPackage.showTime}}</span>
+        </p>
+
+        <div style="position:absolute; left: 0vw;top: 52vh;font-size: 20px;width: 100vw;">
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/line.jpg" style="position: absolute;top: 2vh;left: 0; width: 34vw;">
+            <span style="position: absolute;left: 50%;transform: translateX(-50%);color: #958888;font-size: 18px;">红包领取记录</span>
+            <img src="http://180.188.22.245:10001/ttxindaoyou/files/images/daoyou/package/line.jpg" style="position: absolute;top: 2vh;right: 0; width: 34vw;" >
+        </div>
+
+        <span style="position:absolute; left: 24vw;top: 56vh;font-size: 20px;">{{redPackage.receiveName}}</span>
+
+        <p style="position:absolute; left: 24vw;top: 61vh;">领取了 <span style="color: red;font-size: 16px;">{{redPackage.count}}张</span>房卡</p>
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    var red_code = DynLoading.getUrlParam("red_code");
+    var obj = DynLoading.hall(BaseUrl + '/ay/rpD?red_code=' + red_code);
+
+
+    var globalData = {
+        "isWechat": "0",
+        "isXianliao": "0",
+        "shareTitle": "房卡包:",
+        "xlTitle": "房卡包:",
+        "hallPath": "/index.html"
+    };
+    globalData.wid = "123";
+    globalData.tt = "ZjZjMG56bHFBQTFnYmFrbHJJYnhqTE90M3NROHJvMFhoaHpiZkRvQjg3eVQ5VkFbY11BSzg=";
+
+    var app = angular.module('app', [])
+
+    app.directive('ngInput', [function () {
+        return {
+            restrict: 'A',
+            require: '?ngModel',
+            link: function (scope, element, attrs) {
+                element.on('input', oninput);
+                scope.$on('$destroy', function () {//销毁的时候取消事件监听
+                    element.off('input', oninput);
+                });
+
+                function oninput(event) {
+                    scope.$evalAsync(attrs['ngInput'], {$event: event, $value: this.value});
+                }
+            }
+        }
+    }]);
+
+    app.controller("myCtrl", function ($scope, $http) {
+        $scope.width = window.innerWidth;
+        $scope.height = window.innerHeight;
+        $scope.rpHeight = $scope.width * 1.02;
+        $scope.rpWidth = $scope.width * 0.76
+        $scope.rpLeft = $scope.width * 0.12;
+        $scope.rpX = $scope.rpWidth * 0.08;
+        $scope.rpTop = ($scope.height - $scope.rpHeight) / 2 - 30;
+        $scope.lineTop = $scope.rpTop + $scope.rpHeight / 2;
+        $scope.receiveNameX = $scope.rpX * 1.5 + $scope.width * 0.1;
+        $scope.receiveNameWidth = ($scope.rpWidth - $scope.rpX * 3 - $scope.width * 0.1) / 1.5;
+        $scope.receiveNameOffset = 2;
+        $scope.receiveCountWidth = $scope.rpWidth - $scope.receiveNameX - $scope.receiveNameWidth - $scope.receiveNameOffset - $scope.rpX * 0.7;
+
+        $scope.userInfo = {
+            "id":obj.user.id,
+            "name":obj.user.name,
+            "avatar":obj.user.avatar,
+            "card":obj.user.diamond,
+        }
+
+        $scope.redPackage = {
+            "isReceive":obj.card.received,
+            "content":"恭喜发财",
+            "count":obj.card.num,
+            "sendName":obj.card.send_name,
+            "sendAvatar":obj.card.send_avatar,
+            "receiveName":obj.card.recv_name,
+            "receiveAvatar":obj.card.recv_avatar,
+            "receiveTime":obj.card.recv_time,
+            "showTime":"",
+            "code":obj.card.uni_id,
+        }
+
+        if ($scope.redPackage.isReceive == 0) {
+            $scope.redPackage.receiveAvatar = $scope.userInfo.avatar;
+            $scope.redPackage.receiveName = $scope.userInfo.name;
+        }
+
+        $scope.userInfo.card = "18";
+
+        var socketStatus = 0;
+        $(".main").show();
+        $("#loading").hide();
+
+
+        $scope.blockBtn = false;
+
+        $scope.activity = new Array();
+        $scope.isShowAlert = false;
+        $scope.alertType = 0;
+        $scope.alertText = "";
+        $scope.gotoHall = function () {
+            //alert('你点击了我的');
+            window.location.href = "/index.html";
+        }
+        $scope.showAlert = function (type, text) {
+            $(".alertText").css("top", "90px")
+            $scope.alertType = type;
+            $scope.alertText = text;
+            $scope.isShowAlert = true;
+
+            setTimeout(function () {
+                $scope.$apply();
+            }, 0);
+
+            setTimeout(function () {
+                var wHeight = window.innerHeight;
+                var alertHeight = $(".alertText").height();
+                var textHeight = $(".alertText").height();
+
+                if (alertHeight < wHeight * 0.15) {
+                    alertHeight = wHeight * 0.15;
+                }
+
+                if (alertHeight > wHeight * 0.8) {
+                    alertHeight = wHeight * 0.8;
+                }
+
+                var mainHeight = alertHeight + wHeight * (0.022 + 0.034) * 2 + wHeight * 0.022 + wHeight * 0.056;
+                if (type == 8) {
+                    mainHeight = mainHeight - wHeight * 0.022 - wHeight * 0.056
+                }
+
+                var blackHeight = alertHeight + wHeight * 0.034 * 2;
+                var alertTop = wHeight * 0.022 + (blackHeight - textHeight) / 2;
+
+                $(".alert .mainPart").css('height', mainHeight + 'px');
+                $(".alert .mainPart").css('margin-top', '-' + mainHeight / 2 + 'px');
+                $(".alert .mainPart .backImg .blackImg").css('height', blackHeight + 'px');
+                $(".alert .mainPart .alertText").css('top', alertTop + 'px');
+
+                $scope.$apply();
+            }, 0)
+        }
+        $scope.closeAlert = function () {
+            if ($scope.alertType == 1) {
+                $scope.isShowAlert = false;
+                if (!$scope.is_connect) {
+                    $scope.is_connect = true;
+                }
+            } else {
+                $scope.isShowAlert = false;
+            }
+        }
+
+        $scope.backToHall = function () {
+            var url = globalData.hallPath;
+            window.location.replace(url)
+        }
+
+        $scope.cardNum = Number($scope.userInfo.card);
+        $scope.number = 0; //输入数量
+        $scope.inputNumber = null;  //输入框数字
+
+        if ($scope.cardNum === null
+            || $scope.cardNum === undefined
+            || isNaN($scope.cardNum)) {
+            $scope.cardNum = 0;
+        }
+
+        setTimeout(function () {
+            if ($scope.redPackage.isReceive == 1) {
+                $("#notopen").hide();
+                $("#ropen").show();
+            } else {
+                $("#notopen").show();
+                $("#ropen").hide();
+            }
+
+        }, 1);
+
+        $scope.formatShowTime = function () {
+
+            var newDate = new Date($scope.redPackage.receiveTime);
+            newDate.setTime($scope.redPackage.receiveTime * 1000);
+            var Month = (newDate.getMonth() + 1 < 10 ? '0' + (newDate.getMonth() + 1) : newDate.getMonth() + 1);
+            var Day = newDate.getDate() + ' ';
+            var Day = newDate.getDate() < 10 ? '0' + newDate.getDate() : newDate.getDate();
+            var hour = newDate.getHours() < 10 ? '0' + newDate.getHours() : newDate.getHours();
+            var min = newDate.getMinutes() < 10 ? '0' + newDate.getMinutes() : newDate.getMinutes();
+
+            $scope.redPackage.showTime = Month + '-' + Day + '    ' + hour + ':' + min;
+        }
+
+        $scope.formatShowTime();
+
+        $scope.receiveRedPackage = function () {
+            $http({
+                url: BaseUrl+'/ay/receiveRP',
+                method: 'POST',
+                headers: {
+                    "Authorization": DynLoading.getWwid()
+                },
+                withCredentials: true,//必须要填
+                data: {
+                    'account_id': "13556",
+                    'code': $scope.redPackage.code,
+                }
+            })
+                .success(function (data, header, config, status) {
+
+                    var timestamp = Date.parse(new Date());
+                    timestamp = timestamp / 1000;
+                    $scope.redPackage.receiveTime = timestamp;
+                    $scope.formatShowTime();
+
+                    setTimeout(function () {
+
+                        if (data.result == 0) {
+                            $("#ropen").show();
+                            $("#notopen").hide();
+                        } else {
+                            window.location.reload();
+                            //alert(data.result_message);
+                        }
+                    }, 500);
+                    setTimeout(function () {
+                        $scope.blockBtn = false
+                    }, 2000)
+                })
+                .error(function (data, header, config, status) {
+                    $(".btnOpen").removeClass('transf');
+                    // window.location.reload();
+                    setTimeout(function () {
+                        $scope.blockBtn = false
+                    }, 2000)
+                    alert(data.result_message);
+                });
+        }
+
+        // <div  style="position: absolute; height: {{width * 1.02 / 1.8 / 5.1}}px; width: {{width * 1.02 / 1.8}}px; left: {{(rpWidth - width * 1.02 / 1.8) / 2}}px; top: {{rpHeight * 0.45}}px;" ng-click="clickOpenRedPackage()">
+        //         <img src=BaseUrl+"files/images/redpackage/redpackage_get_btn.png" style="width: 100%;position: relative;height:100%; " />
+        //     </div>
+
+        setTimeout(function () {
+            var tempDiv = document.getElementById('openImg');
+            if (tempDiv) {
+                tempDiv.addEventListener('touchstart', function (event) {
+                    $('#openImg').animate({top: "-10%", left: "-10%", width: "120%", height: "120%"}, 30);
+                }, false);
+
+                tempDiv.addEventListener('touchend', function (event) {
+                    $('#openImg').animate({top: "0%", left: "0%", width: "100%", height: "100%"}, 30);
+                }, false);
+            }
+        }, 100);
+
+
+        $scope.clickOpenRedPackage = function () {
+            if ($scope.blockBtn == true) {
+                return;
+            }
+            $scope.blockBtn = true;
+            //$('#openImg').animate({top:"-10%",left:"-10%",width:"120%",height:"120%"},30);
+            $scope.receiveRedPackage();
+            setTimeout(function () {
+                //$('#openImg').animate({top:"0%",left:"0%",width:"100%",height:"100%"},30);
+            }, 0);
+        }
+
+
+        /* 绑定手机 */
+        $scope.isAuthPhone = "0";
+        $scope.phone = "";
+        $scope.sPhone = '';
+        $scope.sAuthcode = '';
+        $scope.authcodeType = 1;
+        $scope.authcodeText = '发送验证码';
+        $scope.authcodeTime = 60;
+        $scope.phoneType = 1;
+        $scope.phoneText = '绑定手机';
+
+        setTimeout(function () {
+            $scope.$apply();
+        }, 100);
+
+
+        $scope.getAuthcodeHttp = function (phone) {
+            $http({
+                url: BaseUrl+'account/getMobileSms',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: {
+                    "phone": phone,
+                    "session": "",
+                },
+            }).success(function (data) {
+
+                if (data.result == 0) {
+                    setTimeout(function () {
+                        $scope.authcodeTime = 60;
+                        authcodeTimer();
+                        $scope.authcodeType = 2;
+                    }, 0);
+
+                } else {
+                    alert(data.result_message)
+                }
+            }).error(function (data) {
+                console.log(data);
+            });
+        };
+
+        $scope.bindPhoneHttp = function (phone, authcode) {
+            $http({
+                url: BaseUrl+'account/checkSmsCode',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: {
+                    "phone": phone,
+                    "code": authcode,
+                    "session": "",
+                },
+            }).success(function (data) {
+
+                if (data.result == 0) {
+                    setTimeout(function () {
+                        $scope.isAuthPhone = 0;
+                        $scope.phone = $scope.sPhone;
+
+                        if (data.data.account_id != $scope.userInfo.id) {
+                            $scope.showAlert(23, data.result_message);
+                        } else {
+                            $scope.showAlert(6, data.result_message);
+                        }
+
+                        $scope.userInfo.card = parseInt($scope.userInfo.card) + parseInt(data.data.card_count);
+
+                        $scope.sPhone = '';
+                        $scope.sAuthcode = '';
+                        $scope.$apply();
+                    }, 0);
+                } else {
+                    setTimeout(function () {
+                        $scope.showAlert(6, data.result_message);
+                        $scope.$apply();
+                    }, 0);
+                }
+            }).error(function (data) {
+                setTimeout(function () {
+                    $scope.authcodeTime = 0;
+                    $scope.showAlert(6, "绑定失败");
+                    $scope.$apply();
+                }, 0);
+            });
+        };
+
+
+        $scope.finishBindPhone = function () {
+            window.location.href = window.location.href + "&id=" + 10000 * Math.random() + "&wid=123";
+        };
+
+        $scope.reloadView = function () {
+            window.location.href = window.location.href + "&id=" + 10000 * Math.random() + "&wid=123";
+        };
+
+        $scope.bindPhone = function () {
+            var validPhone = checkPhone($scope.sPhone);
+            var validAuthcode = checkAuthcode($scope.sAuthcode);
+
+            if (validPhone == false) {
+                setTimeout(function () {
+                    $scope.showAlert(6, '手机号码有误，请重填');
+                }, 0);
+
+                return;
+            }
+
+            if (validAuthcode == false) {
+                setTimeout(function () {
+                    $scope.showAlert(6, '验证码有误，请重填');
+                }, 0);
+
+                return;
+            }
+
+            $scope.bindPhoneHttp($scope.sPhone, $scope.sAuthcode);
+        };
+
+        $scope.getAuthcode = function () {
+            if ($scope.authcodeType != 1) {
+                return;
+            }
+
+            var color = $('#authcode').css('background-color');
+
+            if (color != 'rgb(64, 112, 251)') {
+                return;
+            }
+
+            var validPhone = checkPhone($scope.sPhone);
+
+            if (validPhone == false) {
+                setTimeout(function () {
+                    $scope.showAlert(6, '手机号码有误，请重填');
+                }, 10);
+
+                return;
+            }
+
+            $scope.getAuthcodeHttp($scope.sPhone);
+        };
+
+        $scope.phoneChange = function () {
+            var result = checkPhone($scope.sPhone);
+            if (result) {
+                $('#authcode').css('background-color', 'rgb(64,112,251)');
+            } else {
+                $('#authcode').css('background-color', 'lightgray');
+            }
+        };
+
+        function checkPhone(phone) {
+
+            if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        function checkAuthcode(code) {
+            if (code == '' || code == undefined) {
+                return false;
+            }
+
+            var reg = new RegExp("^[0-9]*$");
+            if (!reg.test(code)) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        var authcodeTimer = function authcodeTimer() {
+            if ($scope.authcodeTime <= 0) {
+                $scope.authcodeText = '发送验证码';
+                $scope.authcodeTime = 60;
+                $scope.authcodeType = 1;
+                return;
+            }
+
+            $scope.authcodeTime = $scope.authcodeTime - 1;
+            $scope.authcodeText = $scope.authcodeTime + 's';
+
+            setTimeout(function () {
+                $scope.$apply();
+            }, 0);
+
+            setTimeout(function () {
+                authcodeTimer();
+            }, 1000);
+        };
+
+    })
+
+    $(function () {
+        wx.config({
+            debug: false,
+            appId: "wxacd4ffc5b92fad70",
+            timestamp: "1602834818",
+            nonceStr: "19d857ea32f423353afe5869a94d9d39",
+            signature: "ab1e82f12b461b972cc2d9f5326c772bee716792",
+            jsApiList: [
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'hideMenuItems',
+            ]
+        });
+
+        wx.ready(function () {
+            wx.hideMenuItems({
+                menuList: [
+                    "menuItem:copyUrl",
+                    "menuItem:share:qq",
+                    "menuItem:share:weiboApp",
+                    "menuItem:share:facebook",
+                    "menuItem:share:QZone",
+                    "menuItem:editTag",
+                    "menuItem:copyUrl",
+                    "menuItem:share:email",
+                ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+            });
+
+            wx.onMenuShareTimeline({
+                title: "房卡包",
+                desc: "大朗给你发了一个房卡包",
+                link: BaseUrl+"ay/rpD?red_code=284a80340bd75c447e1a290001f3b10e",
+                imgUrl: "/ttxindaoyou/files/images/redpackage/share_icon.jpg",
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: "房卡包",
+                desc: "大朗给你发了一个房卡包",
+                link: BaseUrl+"ay/rpD?red_code=284a80340bd75c447e1a290001f3b10e",
+                imgUrl: "/ttxindaoyou/files/images/redpackage/share_icon.jpg",
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        // 通过下面这个API隐藏右上角按钮
+        WeixinJSBridge.call('hideOptionMenu');
+    });
+</script>
+</body>
+</html>

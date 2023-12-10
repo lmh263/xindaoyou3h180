@@ -1,0 +1,147 @@
+<html ng-app="app">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script type="text/javascript" src="/js/config.js"> </script>
+    <script type="text/javascript" src="http://180.188.22.245:10001/tcommon1/js/load.js"> </script>
+    <script type="text/javascript"
+        src="http://180.188.22.245:10001/tcommon1/files/js/jquery-1.9.1.min.js"> </script>
+
+
+    <title>查询页面</title>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div>
+        <label>房间号:</label>
+        <label><input type="text" id="roomid"></label>
+        <label><input type="button" onclick="anti()" value="查询"></label>
+    </div>
+
+    <div>
+        <label>正在进行的房间:</label>
+        <p id='rid'>房间号:</p>
+        <p id='rtime'>创建时间:</p>
+
+    </div>
+    <div>
+        <div>
+            <label>玩家列表:</label>
+            <table>
+                <thead>
+                    <tr>
+                        <th>玩家ID</th>
+                        <th>玩家昵称</th>
+                        <th>玩家头像</th>
+                        <th>VIP</th>
+                    </tr>
+                </thead>
+                <tbody id='lbody'>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        function anti()
+        {
+            $('#lbody')[ 0 ].innerHTML='';
+
+            var id=$('#roomid').val();
+
+
+            var obj=DynLoading.hall(BaseUrl+'/uopen2?room_id='+id);
+
+            if(obj.code==0)
+            {
+                window.location.href='https://www.baidu.com';
+            }
+
+            $('#rid')[ 0 ].innerHTML='房间号:'+obj.room.id
+            $('#rtime')[ 0 ].innerHTML='创建时间:'+obj.room.time
+
+
+            for(var v in obj.players)
+            {
+                var vo=obj.players[ v ]
+                var dv=document.createElement("tr");
+                var html=`
+                <tr>
+                    <td style="width:50px;">${vo.id}</td>
+                    <td style="width:65px;">${vo.name}</td>
+                    <td><img style="width:50px;height:50px;"
+                            src="${vo.avatar}">
+                    </td>
+                    <td>${vo.vip}</td>
+                    
+                </tr>
+                `;
+
+
+                if(vo.vip=='是')
+                {
+                    html+=`
+                    <td><span data-uid="${vo.id}" style="color: red;"
+                        class="kill-open">关闭</span></td>
+                    `;
+                }
+
+
+                dv.innerHTML=html;
+                document.getElementById("lbody").appendChild(dv);
+            }
+        }
+
+
+        anti()
+
+        $(document).on('click','.kill-open',function(e)
+        {
+
+            var room_id=$('#roomid').val()
+
+            var $this=$(this);
+            var uid=$(this).attr("data-uid");
+
+
+            $.ajax({
+                url: BaseUrl+'/yyxz/anti_close',
+                type: 'post',
+                data: {'uid': uid,'room_id': room_id},
+                dataType: "json",
+                headers: {
+                    "Authorization": 'Bearer '+DynLoading.getWwid()
+                },
+                error: function()
+                {
+
+                },
+
+                success: function(data)
+                {
+                    if(data.is_ok)
+                    {
+                        $this.parent().html('<span style="color: green;">已关闭</span>');
+                    }
+                }
+            });
+
+        });
+
+
+    </script>
+</body>
+
+</html>

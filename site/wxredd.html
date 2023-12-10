@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>正版授权</title>
+ </head>
+<body>
+<script>
+function getUrlParam(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) return unescape(r[2]);
+  return null;
+}
+var code = getUrlParam("code"); 
+var rurl = getUrlParam("rurl"); 
+var acode = getUrlParam("acode");
+var aurl = getUrlParam("aurl");
+var redirect_uri = 'http://' + window.location.host + '/site/wxredd.html?rurl=' + rurl;
+if(!code){
+	window.location.href = 'http://'+aurl+'?appid='+ acode +'&redirect_uri='+ encodeURI(redirect_uri) +'&response_type=code&scope=snsapi_userinfo#wechat_redirect';  
+}else{
+    if(rurl.indexOf("?",0)!=-1){
+	   window.location.href = rurl + '&code=' +  code;
+	}else{
+	   window.location.href = rurl + '?code=' +  code;
+	}
+}
+</script>
+</body>
+</html>
